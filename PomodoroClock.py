@@ -50,7 +50,7 @@ class PomodoroClock:
         return self.breakCounter
 
     def resetClock(self) -> None:
-        self.minutes, self.seconds = 0, 0
+        self.minutes, self.seconds = 24, 60
 
     def resetBreakCounter(self) -> None:
         self.breakCounter = 0
