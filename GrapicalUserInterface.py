@@ -22,7 +22,7 @@ class GraphicalUserInterface:
         self.pomodoroActive: bool = False
         self.pomodoroObject: object = pomodoroObject
         self.clockObject: object = clockObject
-        self.current_version = "1.3"
+        self.current_version: str = "1.3"
 
         self.initializeMenues()
         self.initializeButtons()
@@ -37,11 +37,11 @@ class GraphicalUserInterface:
         self.resultFrame = LabelFrame(master= self.root, bg="grey")
         self.resultFrame.pack(fill=BOTH, expand="yes")
 
-        self.startButton = Button(master= self.buttonFrame, text="Start counting working time", command=lambda: self.updateWorkTimeLabel(), font= fontDict, **BUTTON_STYLE, bg= "#e87807")
+        self.startButton = Button(master= self.buttonFrame, text="Start working", command=lambda: self.updateWorkTimeLabel(clockObject= self.clockObject, timeLabel= self.timeLabel, timeLabelHeader= self.timeLabelHeader, resultFrame= self.resultFrame), font= fontDict, **BUTTON_STYLE, bg= "#e87807")
         self.startButton.pack(fill=BOTH, expand="yes")
 
-        self.stopButton = Button(master= self.buttonFrame, text="Reset working time", command=lambda: self.resetClockInterface(), font= fontDict, **BUTTON_STYLE, bg="#FA9632", state=DISABLED)
-        self.stopButton.pack(fill=BOTH, expand="yes")
+        self.resetButton = Button(master= self.buttonFrame, text="Reset working time", command=lambda: self.resetClockInterface(clockObject= self.clockObject, timeLabel= self.timeLabel, timeLabelHeader= self.timeLabelHeader, resultFrame= self.resultFrame), font= fontDict, **BUTTON_STYLE, bg="#FA9632", state=DISABLED)
+        self.resetButton.pack(fill=BOTH, expand="yes")
 
         self.timeLabelHeader = Label(master= self.resultFrame, text="Total Working Time: ", **LABEL_STYLE_FROZEN)
         self.timeLabelHeader.pack(fill=BOTH, expand="yes")
@@ -55,10 +55,10 @@ class GraphicalUserInterface:
         self.menubar = tkinter.Menu(self.root)
         self.aboutfiles = tkinter.Menu(self.menubar)
         self.aboutfiles.add_command(label="About", command=lambda: MenuInformation.show_menubar_information())
-        self.aboutfiles.add_command(label="Version Information", command=lambda: MenuInformation.show_version_information(self.current_version))
+        self.aboutfiles.add_command(label="Version Information", command=lambda: MenuInformation.show_version_information(current_version_number= self.current_version))
 
         self.menufiles = tkinter.Menu(self.menubar)
-        self.menufiles.add_command(label="Export working time to .txt", command= lambda: Export.create_work_time_txt(self.clockObject))
+        self.menufiles.add_command(label="Export working time to .txt", command= lambda: Export.create_work_time_txt(clockObject= self.clockObject))
         self.menufiles.add_separator()
         self.menufiles.add_command(label="Quit Work-Time-Tracker", command=quit)
 
@@ -90,7 +90,7 @@ class GraphicalUserInterface:
                     font= ('calibri', 15, 'bold'))
             self.pomodoroLabel.pack(fill=X, expand="yes")
             
-            self.pomodoroButton = Button(master= self.pomodoroFrame, text= "Start Pomodoro Timer", font= fontDict, width= 10, activebackground = "#eb9234", bg= "#e87807")
+            self.pomodoroButton = Button(master= self.pomodoroFrame, text= "Start Pomodoro", font= fontDict, width= 10, activebackground = "#eb9234", bg= "#e87807", command= lambda: self.updateWorkTimeLabel(clockObject= self.pomodoroObject, timeLabel= self.pomodoroLabel, timeLabelHeader= self.pomodoroLabelHeader, resultFrame= self.pomodoroFrame))
             self.pomodoroButton.pack(fill=X, expand="yes")
 
             self.pomodoroItems = [self.pomodoroFrame, self.pomodoroLabelHeader, self.pomodoroLabel, self.pomodoroButton]
@@ -108,20 +108,24 @@ class GraphicalUserInterface:
         self.pomodoroActive = False
 
 
-    def resetClockInterface(self):
+    def resetClockInterface(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object):
         
-        self.stopCounting()
-        self.clockObject.resetClock()
+        timeLabel = self.stopCounting(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame)
+        clockObject.resetClock()
+        
+        self.startButton.config(text="Start working", command=lambda: self.updateWorkTimeLabel(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame))
+        self.resetButton.config(state=DISABLED, bg="#FA9632")
+        timeLabel.config(text= clockObject)
 
-        self.startButton.config(text="Start counting working time", command=lambda: self.updateWorkTimeLabel())
-        self.stopButton.config(state=DISABLED, bg="#FA9632")
-        self.timeLabel.config(text=self.clockObject)
+
+    def startPomodoro(self):
+        print("hello")
 
 
-    def updateBackgroundColour(self):
-        self.timeLabel.config(**LABEL_STYLE_ACTIVE)
-        self.timeLabelHeader.config(**LABEL_STYLE_ACTIVE)
-        self.resultFrame.config(bg = "green")
+    def updateBackgroundColour(self, timeLabel: object, timeLabelHeader: object, resultFrame: object):
+        timeLabel.config(**LABEL_STYLE_ACTIVE)
+        timeLabelHeader.config(**LABEL_STYLE_ACTIVE)
+        resultFrame.config(bg = "green")
 
 
     def checkTimePomodoro(self) -> None:
@@ -142,40 +146,42 @@ class GraphicalUserInterface:
             clockObject.setMinutes()
 
 
-    def updateWorkTimeLabel(self) -> None:
+    def updateWorkTimeLabel(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
 
-        self.updateBackgroundColour()
-        self.checkTimeWorkTimer(clockObject= self.clockObject)
-        self.checkStartButtonText()
-        self.timeLabel.config(text= self.clockObject)
-        self.timeLabel.after(1000, lambda: self.updateWorkTimeLabel())
-
-
-    def checkStartButtonText(self) -> None:
-
-        if self.startButton.cget("text") == "Start counting working time":
-            self.startButton.config(command=lambda: self.stopCounting(), text="Stop counting working time")
-            self.stopButton.config(state=NORMAL, bg="#e87807")
-
-        if self.startButton.cget("text") == "Restart counting working time":
-            self.startButton.config(command=lambda: self.stopCounting(), text="Stop counting working time")
+        self.updateBackgroundColour(timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame)
+        self.checkTimeWorkTimer(clockObject= clockObject)
+        self.checkStartButtonText(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame)
+        timeLabel.config(text= clockObject)
+        timeLabel.after(1000, lambda: self.updateWorkTimeLabel(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame))
 
 
-    def stopCounting(self) -> None:
+    def checkStartButtonText(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
 
-        self.timeLabel.destroy()
-        self.timeLabel.destroy()
-        self.timeLabel.destroy()
-        self.timeLabel.destroy()
-        self.timeLabel.destroy()
+        if self.startButton.cget("text") == "Start working":
+            self.startButton.config(command=lambda: self.stopCounting(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame), text="Stop counting")
+            self.resetButton.config(state=NORMAL, bg="#e87807")
+
+        if self.startButton.cget("text") == "Restart counting":
+            self.startButton.config(command=lambda: self.stopCounting(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame), text="Stop counting")
+
+
+    def stopCounting(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> object:
+
+        timeLabel.destroy()
+        timeLabel.destroy()
+        timeLabel.destroy()
+        timeLabel.destroy()
+        timeLabel.destroy()
         
+        timeLabel = Label(master= resultFrame, text= clockObject, **LABEL_STYLE_FROZEN)
+        timeLabel.pack(fill=BOTH, expand="yes")
+        timeLabelHeader.config(bg="grey")
+        resultFrame.config(bg="grey")
 
-        self.timeLabel = Label(master= self.resultFrame, text= self.clockObject, **LABEL_STYLE_FROZEN)
-        self.timeLabel.pack(fill=BOTH, expand="yes")
-        self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Restart counting working time")
-        self.timeLabelHeader.config(bg="grey")
-        self.resultFrame.config(bg="grey")
+        self.startButton.config(command=lambda: self.updateWorkTimeLabel(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame), text="Restart counting")
+        self.resetButton.config(command=lambda: self.resetClockInterface(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame))
 
+        return timeLabel
 
 def main():
     cl = Clock()

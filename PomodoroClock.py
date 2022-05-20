@@ -36,11 +36,11 @@ class PomodoroClock:
     def getBreakCounter(self) -> int:
         return self.breakCounter
 
-    def resetPomodoroClock(self) -> None:
+    def resetClock(self) -> None:
         self.minutes, self.seconds = 0, 0
 
     def resetBreakCounter(self) -> None:
         self.breakCounter = 0
 
     def __repr__(self) -> str:
-        return f"{self.getMinutes():.02.0f}:{self.getSeconds():.02.0f}"
+        return f"{self.getMinutes():02.0f}:{self.getSeconds():02.0f}"
