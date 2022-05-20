@@ -6,6 +6,13 @@ class PomodoroClock:
         self.pomodoroTime: int = 25
         self.breakCounter: int = 0
         self.breakTime: int = 5
+        self.pomodoroActive: bool = False
+
+    def setPomodoroActive(self, active: bool) -> None:
+        self.pomodoroActive = active
+    
+    def getPomodoroActive(self) -> bool:
+        return self.pomodoroActive
 
     def increaseBreakCounter(self) -> None:
         self.breakCounter += 1

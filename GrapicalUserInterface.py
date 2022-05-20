@@ -108,6 +108,47 @@ class GraphicalUserInterface:
         self.pomodoroActive = False
 
 
+    def checkPomodoroTimer(self, clockObject: object) -> None:
+        if (clockObject.getMinutes() == 0) & (clockObject.getSeconds() == 0):
+            clockObject.setSeconds()
+            clockObject.setMinutes()
+            clockObject.increaseBreakCounter()
+        
+        elif clockObject.getSeconds() == 0:
+            clockObject.decreaseMinutes()
+            clockObject.setSeconds()
+        
+        else:
+            clockObject.decreaseSeconds()
+
+
+    def updatePomodorBackgroundColor(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object, informationLabel: object, pomodoroButton: object) -> None:
+        
+        if clockObject.getPomodoroActive():
+            timeLabel.config(text= clockObject, bg="green")
+            timeLabelHeader.config(bg="green")
+            resultFrame.config(bg="green")
+            informationLabel.config(bg="green", text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Recommended break duration: {self.pomodoroObject.getBreakTime()} min")
+            pomodoroButton.config(state= DISABLED, bg="#FA9632")
+
+
+    def updatePomodoroTimeLabel(self, clockObject: object, timeLabel: object, informationLabel: object, timeLabelHeader: object, resultFrame: object, pomodoroButton: object) -> None:
+        
+        clockObject.setPomodoroActive(True)
+
+        self.checkPomodoroTimer(clockObject= clockObject)
+        self.updatePomodorBackgroundColor(clockObject= clockObject, timeLabel= timeLabel, informationLabel= informationLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame, pomodoroButton= pomodoroButton)        
+
+
+        # timeLabel.config(text= clockObject, bg="green")
+        # timeLabelHeader.config(bg="green")
+        # resultFrame.config(bg="green")
+        # informationLabel.config(bg="green", text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Recommended break duration: {self.pomodoroObject.getBreakTime()} min")
+        # pomodoroButton.config(state= DISABLED, bg="#FA9632")
+        
+        timeLabel.after(1000, lambda: self.updatePomodoroTimeLabel(clockObject= clockObject, timeLabel= timeLabel, informationLabel= informationLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame, pomodoroButton= pomodoroButton))
+
+
     def resetClockInterface(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
         
         timeLabel = self.stopCounting(clockObject= clockObject, timeLabel= timeLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame)
@@ -124,10 +165,6 @@ class GraphicalUserInterface:
         resultFrame.config(bg = "green")
 
 
-    def checkTimePomodoro(self) -> None:
-        pass
-
-
     def checkTimeWorkTimer(self, clockObject: object) -> None:
 
         if clockObject.getSeconds() == 60:
@@ -140,31 +177,7 @@ class GraphicalUserInterface:
         if clockObject.getMinutes() == 60:
             clockObject.increaseHours()
             clockObject.setMinutes()
-
-
-    def updatePomodoroTimeLabel(self, clockObject: object, timeLabel: object, informationLabel: object, timeLabelHeader: object, resultFrame: object, pomodoroButton: object) -> None:
-        
-        if (clockObject.getMinutes() == 0) & (clockObject.getSeconds() == 0):
-            clockObject.setSeconds()
-            clockObject.setMinutes()
-            clockObject.increaseBreakCounter()
-        
-        elif clockObject.getSeconds() == 0:
-            clockObject.decreaseMinutes()
-            clockObject.setSeconds()
-        
-        else:
-            clockObject.decreaseSeconds()
-        
-
-        timeLabel.config(text= clockObject, bg="green")
-        timeLabelHeader.config(bg="green")
-        resultFrame.config(bg="green")
-        informationLabel.config(bg="green", text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Recommended break duration: {self.pomodoroObject.getBreakTime()} min")
-        pomodoroButton.config(state= DISABLED, bg="#FA9632")
-        
-        timeLabel.after(1000, lambda: self.updatePomodoroTimeLabel(clockObject= clockObject, timeLabel= timeLabel, informationLabel= informationLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame, pomodoroButton= pomodoroButton))
-        
+  
 
     def updateWorkTimeLabel(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
 
