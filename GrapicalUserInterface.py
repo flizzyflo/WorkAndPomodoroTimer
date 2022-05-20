@@ -10,7 +10,7 @@ from Export import Export
 class GraphicalUserInterface:
 
 
-    def __init__(self, clockObject: object, pomodoroObject: object):
+    def __init__(self, clockObject: object, pomodoroObject: object) -> None:
         self.root = Tk()
         self.root.title("WorkTime Tracking")
         self.root.geometry(frameSize)
@@ -30,7 +30,7 @@ class GraphicalUserInterface:
         self.root.mainloop()
 
 
-    def initializeButtons(self):
+    def initializeButtons(self) -> None:
         self.buttonFrame = LabelFrame(master= self.root)
         self.buttonFrame.pack(fill=BOTH, expand="yes")
 
@@ -50,7 +50,7 @@ class GraphicalUserInterface:
         self.timeLabel.pack(fill=BOTH, expand="yes")
 
 
-    def initializeMenues(self):
+    def initializeMenues(self) -> None:
         
         self.menubar = tkinter.Menu(self.root)
         self.aboutfiles = tkinter.Menu(self.menubar)
@@ -72,7 +72,7 @@ class GraphicalUserInterface:
         self.root.config(menu= self.menubar)
 
 
-    def initializePomodoro(self):
+    def initializePomodoro(self) -> None:
 
         if self.pomodoroActive == False:
 
@@ -100,7 +100,7 @@ class GraphicalUserInterface:
             self.deactivatePomodoro()
 
 
-    def deactivatePomodoro(self):
+    def deactivatePomodoro(self) -> None:
 
         for pomodoroItem in self.pomodoroItems:
             pomodoroItem.destroy()
@@ -118,7 +118,7 @@ class GraphicalUserInterface:
         timeLabel.config(text= clockObject)
 
 
-    def updateBackgroundColour(self, timeLabel: object, timeLabelHeader: object, resultFrame: object):
+    def updateBackgroundColour(self, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
         timeLabel.config(**LABEL_STYLE_ACTIVE)
         timeLabelHeader.config(**LABEL_STYLE_ACTIVE)
         resultFrame.config(bg = "green")
@@ -128,7 +128,7 @@ class GraphicalUserInterface:
         pass
 
 
-    def checkTimeWorkTimer(self, clockObject: object):
+    def checkTimeWorkTimer(self, clockObject: object) -> None:
 
         if clockObject.getSeconds() == 60:
             clockObject.increaseMinutes()
@@ -165,10 +165,6 @@ class GraphicalUserInterface:
         
         timeLabel.after(1000, lambda: self.updatePomodoroTimeLabel(clockObject= clockObject, timeLabel= timeLabel, informationLabel= informationLabel, timeLabelHeader= timeLabelHeader, resultFrame= resultFrame, pomodoroButton= pomodoroButton))
         
-    
-    def checkPomodoroBreaks(self) -> None:
-        pass
-
 
     def updateWorkTimeLabel(self, clockObject: object, timeLabel: object, timeLabelHeader: object, resultFrame: object) -> None:
 
@@ -207,7 +203,8 @@ class GraphicalUserInterface:
 
         return timeLabel
 
-def main():
+
+def main() -> None:
     cl = Clock()
     pm = PomodoroClock()
     gui = GraphicalUserInterface(cl, pm)

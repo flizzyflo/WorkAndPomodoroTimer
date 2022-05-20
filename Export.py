@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 class Export:
-    def create_work_time_txt(clockObject: object, filename: str = "WorkingTime"):
+    def create_work_time_txt(clockObject: object, filename: str = "WorkingTime") -> None:
 
         if sys.platform == "win32":
             with open(rf'C:\Users\{getpass.getuser()}\Desktop\{filename}_{datetime.now().strftime(("%B"))}.txt', "a",) as file:
