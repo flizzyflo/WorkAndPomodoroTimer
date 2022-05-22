@@ -1,13 +1,11 @@
 import tkinter
 from tkinter import messagebox
 
-
-
 from tkinter import *
-from PomodoroClock import PomodoroClock
 from Settings import *
-from Clock import Clock
 from MenuInformation import *
+from PomodoroClock import PomodoroClock
+from Clock import Clock
 from Export import Export
 
 class GraphicalUserInterface:
@@ -24,7 +22,7 @@ class GraphicalUserInterface:
         self.pomodoroActive: bool = False
         self.pomodoroObject: object = pomodoroObject
         self.clockObject: object = clockObject
-        self.current_version: str = "1.5"
+        self.current_version: str = VERSION
 
         self.initializeMenues()
         self.initializeWorkTimerButtons()
@@ -110,7 +108,11 @@ class GraphicalUserInterface:
         self.timeLabel.pack(fill= BOTH, 
                             expand= "yes")
 
-### From here on downwards are the pomodoro clock gui methods
+
+#################################################################
+### From here on downwards are the pomodoro clock gui methods ###
+#################################################################
+
 
     def initializePomodoroGUI(self) -> None:
         """Initializes the pomodoro GUI. Called via menubar"""
@@ -135,7 +137,7 @@ class GraphicalUserInterface:
 
 
             self.pomodoroInformationLabel = Label(master= self.pomodoroFrame, 
-                                                  text= f"Total Breaks: {self.pomodoroObject.getBreakCounter() }  |  Next break duration: {self.pomodoroObject.getBreakTime()} min.", 
+                                                  text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Next break duration: {self.pomodoroObject.getBreakTime()} min.", 
                                                   width= width, 
                                                   bg= TITLE_BACKGROUND_COLOR_FROZEN, 
                                                   fg= TITLE_FONT_COLOR, 
@@ -231,11 +233,13 @@ class GraphicalUserInterface:
         """Brings up a pop up window informing a user about the necessity of a break"""
 
         messagebox.showwarning(title= f"Overwhelming! You are so hardworking!", 
-                               message= f"{returnRandomBreakMessage(self.pomodoroObject)}")
+                               message= f"{MenuInformation.returnRandomBreakMessage(self.pomodoroObject)}")
+
 
 ##################################################################
 ### From here on downwards are the work time clock gui methods ###
 ##################################################################
+
 
     def resetClockInterface(self) -> None:
         """Stops counting of the work time counter and sets it back to its inital state."""
@@ -323,4 +327,5 @@ def main() -> None:
     pm = PomodoroClock()
     gui = GraphicalUserInterface(cl, pm)
 
-main()
+if __name__ == "__main__":
+    main()
