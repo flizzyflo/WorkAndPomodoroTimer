@@ -9,7 +9,7 @@ class MenuInformation:
 
     def show_version_information(current_version_number: str) -> None:
         messagebox.showinfo("Changelog & Version information", 
-        f"""-Current Version: {current_version_number}: Implemented random break information text selection. Made application always in foreground.
+        f"""-Current Version: {current_version_number}: Implemented random selection of break information shown in message window. Made application displayed always in foreground.
         \n-Version 1.4: Implementation of Pomodoro Counter as additional feature. Accessible via Settings -> Pomodoro Timer. More refactoring of code.
         \n-Version 1.3: Massive refactoring of the whole application. Made code more efficient and easier to maintain. Preliminary implementation of PomodoroClass.
         \n-Version 1.2: Added the possibility to export tracking into a .txt file which is stored at ones desktop. Accessible via 'File -> Export working time to .txt. Changed the color-style of the application. Implemented the Pomodoro-Setting Checkbox to prepare for possible Pomodoro Counter update.'
