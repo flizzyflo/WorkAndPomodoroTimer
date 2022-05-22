@@ -159,6 +159,8 @@ class GraphicalUserInterface:
             self.pomodoroTimeLabel.pack(fill= X, 
                                         expand= "yes")
 
+            self.startButton.config(command= lambda: self.updateBothTimer())
+
             self.pomodoroItems = [self.pomodoroFrame, self.pomodoroLabelHeader, self.pomodoroTimeLabel, self.pomodoroInformationLabel, self.pomodoroButton]
             self.pomodoroActive = True
 
@@ -183,7 +185,6 @@ class GraphicalUserInterface:
         pomodoro cycle"""
 
         self.pomodoroObject.resetClock(minutes= minutes, seconds= seconds)
-
 
 
     def checkPomodoroTimer(self) -> None:
