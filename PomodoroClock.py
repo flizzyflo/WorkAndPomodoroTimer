@@ -3,7 +3,6 @@ class PomodoroClock:
     def __init__(self) -> None:
         self.minutes: int = 24
         self.seconds: int = 60
-        self.pomodoroTime: int = 25
         self.breakCounter: int = 0
         self.breakTime: int = 5
         self.pomodoroActive: bool = False
@@ -23,11 +22,11 @@ class PomodoroClock:
     def decreaseSeconds(self) -> None:
         self.seconds -= 1
 
-    def setMinutes(self) -> None:
-        self.minutes = 24
+    def setMinutes(self, minutes: int) -> None:
+        self.minutes = minutes
 
-    def setSeconds(self) -> None:
-        self.seconds = 60
+    def setSeconds(self, seconds: int) -> None:
+        self.seconds = seconds
 
     def getMinutes(self) -> int:
         return self.minutes
@@ -35,13 +34,13 @@ class PomodoroClock:
     def getSeconds(self) -> int:
         return self.seconds
 
-    def setBreakTime(self) -> None:
+    def setBreakTime(self, breakTimeLong: int, breakTimeShort: int) -> None:
         
         if self.getBreakCounter() == 4:
-            self.breakTime = 20
+            self.breakTime = breakTimeLong
 
         else:
-            self.breakTime = 5 
+            self.breakTime = breakTimeShort 
 
     def getBreakTime(self) -> int:
         return self.breakTime
@@ -49,8 +48,8 @@ class PomodoroClock:
     def getBreakCounter(self) -> int:
         return self.breakCounter
 
-    def resetClock(self) -> None:
-        self.minutes, self.seconds = 24, 60
+    def resetClock(self, minutes: int, seconds: int) -> None:
+        self.minutes, self.seconds = minutes, seconds
 
     def resetBreakCounter(self) -> None:
         self.breakCounter = 0

@@ -17,3 +17,8 @@ LABEL_STYLE_FROZEN ={"background": TITLE_BACKGROUND_COLOR_FROZEN,
 LABEL_STYLE_ACTIVE ={"background": TITLE_BACKGROUND_COLOR_ACTIVE, 
                     "foreground": TITLE_FONT_COLOR, 
                     "font": ('calibri', 30, 'bold')}
+
+LONGBREAK = 20
+SHORTBREAK = 5
+POMODOROMINUTES = 24
+POMODOROSECONDS = 60
