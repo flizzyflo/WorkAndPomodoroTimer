@@ -1,8 +1,8 @@
 class PomodoroClock:
     
     def __init__(self) -> None:
-        self.minutes: int = 24
-        self.seconds: int = 60
+        self.minutes: int = 0
+        self.seconds: int = 2
         self.breakCounter: int = 0
         self.breakTime: int = 5
         self.pomodoroActive: bool = False

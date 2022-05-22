@@ -1,6 +1,8 @@
 import tkinter
 from tkinter import messagebox
 
+
+
 from tkinter import *
 from PomodoroClock import PomodoroClock
 from Settings import *
@@ -17,12 +19,12 @@ class GraphicalUserInterface:
         self.root.minsize(500, 500)
         self.root.maxsize(500, 500)
         self.root.iconbitmap("./clock.ico")
-        self.root.attributes("-topmost", False)
+        self.root.attributes("-topmost", True)
 
         self.pomodoroActive: bool = False
         self.pomodoroObject: object = pomodoroObject
         self.clockObject: object = clockObject
-        self.current_version: str = "1.4"
+        self.current_version: str = "1.5"
 
         self.initializeMenues()
         self.initializeWorkTimerButtons()
@@ -133,7 +135,7 @@ class GraphicalUserInterface:
 
 
             self.pomodoroInformationLabel = Label(master= self.pomodoroFrame, 
-                                                  text= f"Total Breaks: {self.pomodoroObject.getBreakCounter() }  |  Rec. break duration: {self.pomodoroObject.getBreakTime()} min", 
+                                                  text= f"Total Breaks: {self.pomodoroObject.getBreakCounter() }  |  Next break duration: {self.pomodoroObject.getBreakTime()} min.", 
                                                   width= width, 
                                                   bg= TITLE_BACKGROUND_COLOR_FROZEN, 
                                                   fg= TITLE_FONT_COLOR, 
@@ -213,7 +215,7 @@ class GraphicalUserInterface:
         self.pomodoroLabelHeader.config(bg= color)
         self.pomodoroFrame.config(bg= color)
         self.pomodoroInformationLabel.config(bg= color, 
-                                             text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Recommended break duration: {self.pomodoroObject.getBreakTime()} min")
+                                             text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Next break duration: {self.pomodoroObject.getBreakTime()} min.")
             
 
     def stopPomodoroCounting(self):
@@ -256,7 +258,7 @@ class GraphicalUserInterface:
         """Brings up a pop up window informing a user about the necessity of a break"""
 
         messagebox.showwarning(title= f"Overwhelming! You are so hardworking!", 
-                               message= f"You should take a break. Your break should last {self.pomodoroObject.getBreakTime()} minutes. After that, you will be even more productive, I promise!" )
+                               message= f"{returnRandomBreakMessage(self.pomodoroObject)}")
 
 ### From here on downwards are the work time clock gui methods
 
@@ -321,11 +323,11 @@ class GraphicalUserInterface:
         """Adjusts the colorization of the buttons and manages their behaviour"""
 
         if self.startButton.cget("text") == "Start working":
-            self.startButton.config(command=lambda: self.stopCounting(), text="Stop counting")
+            self.startButton.config(command=lambda: self.stopCounting(), text="Take a break")
             self.resetButton.config(state=NORMAL, bg="#e87807")
 
-        if self.startButton.cget("text") == "Restart counting":
-            self.startButton.config(command=lambda: self.stopCounting(), text="Stop counting")
+        if self.startButton.cget("text") == "Continue working":
+            self.startButton.config(command=lambda: self.stopCounting(), text="Take a break")
 
 
     def stopCounting(self):
@@ -342,7 +344,7 @@ class GraphicalUserInterface:
         self.timeLabelHeader.config(bg="grey")
         self.resultFrame.config(bg="grey")
 
-        self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Restart counting")
+        self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Continue working")
         self.resetButton.config(command=lambda: self.resetClockInterface())
 
 
