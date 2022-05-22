@@ -162,8 +162,6 @@ class GraphicalUserInterface:
             self.pomodoroItems = [self.pomodoroFrame, self.pomodoroLabelHeader, self.pomodoroTimeLabel, self.pomodoroInformationLabel, self.pomodoroButton]
             self.pomodoroActive = True
 
-            
-      
         else:
             self.deactivatePomodoroGUI(minutes= POMODOROMINUTES, seconds= POMODOROSECONDS)
 
@@ -260,7 +258,9 @@ class GraphicalUserInterface:
         messagebox.showwarning(title= f"Overwhelming! You are so hardworking!", 
                                message= f"{returnRandomBreakMessage(self.pomodoroObject)}")
 
-### From here on downwards are the work time clock gui methods
+##################################################################
+### From here on downwards are the work time clock gui methods ###
+##################################################################
 
     def resetClockInterface(self) -> None:
         """Stops counting of the work time counter and sets it back to its inital state."""
@@ -344,8 +344,19 @@ class GraphicalUserInterface:
         self.timeLabelHeader.config(bg="grey")
         self.resultFrame.config(bg="grey")
 
-        self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Continue working")
+        if (self.pomodoroActive == True) and (self.pomodoroObject.getPomodoroActive() == False):
+            self.startButton.config(command=lambda: self.updateBothTimer(), text="Continue working")
+
+        else:
+            self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Continue working")
         self.resetButton.config(command=lambda: self.resetClockInterface())
+
+
+    def updateBothTimer(self):
+        """Starts both timers, pomodoro and work timer after one returns from amking a break."""
+
+        self.updateWorkTimeLabel()
+        self.updatePomodoroTimer(initial= True)
 
 
 def main() -> None:
