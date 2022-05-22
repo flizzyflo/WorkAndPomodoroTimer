@@ -1,7 +1,7 @@
 class Clock:
 
-    def __init__(self) -> None:
-        self.hours, self.minutes, self.seconds = 0, 0, 0
+    def __init__(self, hours: int, minutes: int, seconds: int) -> None:
+        self.hours, self.minutes, self.seconds = hours, minutes, seconds
 
     def __repr__(self) -> str:
         return f"{self.getHours():02.0f}:{self.getMinutes():02.0f}:{self.getSeconds():02.0f}"
@@ -30,10 +30,19 @@ class Clock:
     def increaseHours(self) -> None:
         self.hours += 1
 
+    def decreaseSeconds(self) -> None:
+        self.seconds -= 1
+
+    def decreaseMinutes(self) -> None:
+        self.minutes -= 1
+
+    def decreaseHours(self) -> None:
+        self.hours -= 1
+
     def resetClock(self) -> None:
         self.hours, self.minutes, self.seconds = 0, 0, 0
 
-    def countWorkTime(self) -> None:
+    def countTime(self) -> None:
         """Main method to count and get information of the work time clock object
         about the work time itself."""
 

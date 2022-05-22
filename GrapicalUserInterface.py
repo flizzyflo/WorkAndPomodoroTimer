@@ -276,7 +276,7 @@ class GraphicalUserInterface:
         the actual amount of time already worked"""
 
         self.updateBackgroundColour()
-        self.clockObject.countWorkTime()
+        self.clockObject.countTime()
         self.adaptStartStopButtonText()
         self.timeLabel.config(text= self.clockObject)
         self.timeLabel.after(1000, lambda: self.updateWorkTimeLabel())
@@ -323,7 +323,7 @@ class GraphicalUserInterface:
 
 
 def main() -> None:
-    cl = Clock()
+    cl = Clock(0, 0, 0)
     pm = PomodoroClock()
     gui = GraphicalUserInterface(cl, pm)
 
