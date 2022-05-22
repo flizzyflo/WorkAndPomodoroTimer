@@ -180,30 +180,15 @@ class GraphicalUserInterface:
         self.pomodoroActive = False
 
 
-    def resetPomodoroTimer(self, minutes: int, seconds: int) -> None:
-        """Stops the pomodoro count. Resets the values and the button to start next
-        pomodoro cycle"""
-
-        self.pomodoroObject.resetClock(minutes= minutes, seconds= seconds)
-
-
     def checkPomodoroTimer(self) -> None:
         """Checks minutes and seconds of the pomodoro counter. Increases break counter
         and manages clock counting in general."""
 
+        self.pomodoroObject.countPomodoroTimer(seconds= 60)
+
         if (self.pomodoroObject.getMinutes() == 0) & (self.pomodoroObject.getSeconds() == 0):
-            self.resetPomodoroTimer(minutes= POMODOROMINUTES, seconds= POMODOROSECONDS)
-            self.pomodoroObject.increaseBreakCounter()
-            self.pomodoroObject.setBreakTime(breakTimeLong= LONGBREAK, breakTimeShort= SHORTBREAK)
-            self.pomodoroObject.setPomodoroActive(False)
             self.stopPomodoroCounting()
-        
-        elif self.pomodoroObject.getSeconds() == 0:
-            self.pomodoroObject.decreaseMinutes()
-            self.pomodoroObject.setSeconds(POMODOROSECONDS)
-        
-        else:
-            self.pomodoroObject.decreaseSeconds()
+    
 
 
     def updatePomodoroBackgroundColor(self, color: str) -> None:
@@ -220,19 +205,7 @@ class GraphicalUserInterface:
     def stopPomodoroCounting(self):
         """Stops the count of the pomodoro counter"""
         
-        self.pomodoroTimeLabel.destroy()
-        self.pomodoroTimeLabel.destroy()
-        self.pomodoroTimeLabel.destroy()
-        self.pomodoroTimeLabel.destroy()
-
-        self.pomodoroTimeLabel = Label(master= self.pomodoroFrame, 
-                                       text= self.pomodoroObject, 
-                                       width= width, 
-                                       **LABEL_STYLE_FROZEN)
-
-        self.pomodoroTimeLabel.pack(fill= BOTH, 
-                                    expand= "yes")
-
+        self.pomodoroObject.setPomodoroActive(False)
         self.pomodoroButton.config(state= NORMAL, command= lambda: self.updatePomodoroTimer(initial= True))
 
 
@@ -243,11 +216,13 @@ class GraphicalUserInterface:
             self.pomodoroButton.config(state= DISABLED)
 
         self.pomodoroObject.setPomodoroActive(True)
-
         self.checkPomodoroTimer()
+
         if self.pomodoroObject.getPomodoroActive() == False:
+            self.pomodoroObject.resetClock(minutes= POMODOROMINUTES, seconds= POMODOROSECONDS)
             self.updatePomodoroBackgroundColor(color= "grey")
             self.informAboutBreak()
+
         else:
             self.updatePomodoroBackgroundColor(color= "green")
             self.pomodoroTimeLabel.after(1000, lambda: self.updatePomodoroTimer())
@@ -293,28 +268,12 @@ class GraphicalUserInterface:
             self.resultFrame.config(bg = "green")
 
 
-    def updateWorkTimerClock(self) -> None:
-        """Main method to count and get information of the work time clock object
-        about the work time itself."""
-
-        if self.clockObject.getSeconds() == 60:
-            self.clockObject.increaseMinutes()
-            self.clockObject.setSeconds()
-
-        else:
-            self.clockObject.increaseSeconds()
-
-        if self.clockObject.getMinutes() == 60:
-            self.clockObject.increaseHours()
-            self.clockObject.setMinutes()
-
-
     def updateWorkTimeLabel(self) -> None:
         """Calls several submethods. Updates the visualization of the work timer and presents 
         the actual amount of time already worked"""
 
         self.updateBackgroundColour()
-        self.updateWorkTimerClock()
+        self.clockObject.countWorkTime()
         self.adaptStartStopButtonText()
         self.timeLabel.config(text= self.clockObject)
         self.timeLabel.after(1000, lambda: self.updateWorkTimeLabel())
