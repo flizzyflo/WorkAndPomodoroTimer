@@ -1,8 +1,8 @@
 
 
-fontDict = ('calibri', 25, 'bold')
-width = 30
-frameSize = "500x500"
+FONTDICT = ('calibri', 25, 'bold')
+WIDTH = 30
+FRAMESIZE = "500x500"
 
 VERSION = "1.6"
 

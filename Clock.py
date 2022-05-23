@@ -6,6 +6,19 @@ class Clock:
     def __repr__(self) -> str:
         return f"{self.getHours():02.0f}:{self.getMinutes():02.0f}:{self.getSeconds():02.0f}"
 
+
+    def __add__(self, object: object) -> None:
+        self.hours += object.hours
+        self.minutes += object.minutes
+        self.seconds += object.seconds
+
+
+    def __sub__(self, object: object) -> None:
+        self.hours -= object.hours
+        self.minutes -= object.minutes
+        self.seconds -= object.seconds
+
+
     def getHours(self) -> int:
         return self.hours
 
@@ -56,5 +69,4 @@ class Clock:
         if self.getMinutes() == 60:
             self.increaseHours()
             self.setMinutes()
-
 

@@ -2,11 +2,12 @@ from Settings import *
 
 class PomodoroClock:
     
-    def __init__(self) -> None:
-        self.minutes: int = POMODOROMINUTES
-        self.seconds: int = POMODOROSECONDS
+    def __init__(self, minutes: int, seconds: int, breaktimeShort: int, breaktimeLong: int) -> None:
+        self.minutes: int = minutes
+        self.seconds: int = seconds
         self.breakCounter: int = 0
-        self.breakTime: int = 5
+        self.breakTimeShort: int = breaktimeShort
+        self.breakTimeLong: int = breaktimeLong
         self.pomodoroActive: bool = False
 
     def __repr__(self) -> str:
@@ -42,13 +43,13 @@ class PomodoroClock:
     def setBreakTime(self, breakTimeLong: int, breakTimeShort: int) -> None:
         
         if self.getBreakCounter() % 4 == 0 and (self.getBreakCounter() != 0):
-            self.breakTime = breakTimeLong
+            self.breakTimeShort = breakTimeLong
 
         else:
-            self.breakTime = breakTimeShort 
+            self.breakTimeShort = breakTimeShort 
 
     def getBreakTime(self) -> int:
-        return self.breakTime
+        return self.breakTimeShort
 
     def getBreakCounter(self) -> int:
         return self.breakCounter
@@ -56,7 +57,7 @@ class PomodoroClock:
     def resetClock(self, minutes: int, seconds: int) -> None:
         self.minutes, self.seconds = minutes, seconds
         self.increaseBreakCounter()
-        self.setBreakTime(LONGBREAK, SHORTBREAK)
+        self.setBreakTime(self.breakTimeLong, self.breakTimeShort)
 
     def resetBreakCounter(self) -> None:
         self.breakCounter = 0
