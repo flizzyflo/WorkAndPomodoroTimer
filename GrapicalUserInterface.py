@@ -13,7 +13,7 @@ class GraphicalUserInterface:
     def __init__(self, clockObject: object, pomodoroObject: object) -> None:
         self.root = Tk()
         self.root.title("WorkTime Tracking")
-        self.root.geometry(frameSize)
+        self.root.geometry(FRAMESIZE)
         self.root.minsize(500, 500)
         self.root.maxsize(500, 500)
         self.root.iconbitmap("./clock.ico")
@@ -78,7 +78,7 @@ class GraphicalUserInterface:
         self.startButton = Button(master= self.buttonFrame, 
                                   text= "Start working", 
                                   command= lambda: self.updateWorkTimeLabel(), 
-                                  font= fontDict, 
+                                  font= FONTDICT, 
                                   **BUTTON_STYLE, 
                                   bg= "#e87807")
 
@@ -88,7 +88,7 @@ class GraphicalUserInterface:
         self.resetButton = Button(master= self.buttonFrame, 
                                   text= "Reset working time", 
                                   command= lambda: self.resetClockInterface(), 
-                                  font= fontDict, 
+                                  font= FONTDICT, 
                                   **BUTTON_STYLE, 
                                   bg= "#FA9632", 
                                   state= DISABLED)
@@ -127,7 +127,7 @@ class GraphicalUserInterface:
 
             self.pomodoroButton = Button(master= self.pomodoroFrame, 
                                          text= "Start Pomodoro", 
-                                         font= fontDict, 
+                                         font= FONTDICT, 
                                          width= 10, 
                                          activebackground = "#eb9234", 
                                          bg= "#e87807", 
@@ -138,7 +138,7 @@ class GraphicalUserInterface:
 
             self.pomodoroInformationLabel = Label(master= self.pomodoroFrame, 
                                                   text= f"Breaks: {self.pomodoroObject.getBreakCounter() }  |  Next break duration: {self.pomodoroObject.getBreakTime()} min.", 
-                                                  width= width, 
+                                                  width= WIDTH, 
                                                   bg= TITLE_BACKGROUND_COLOR_FROZEN, 
                                                   fg= TITLE_FONT_COLOR, 
                                                   font= ('calibri', 15, 'bold'))
@@ -148,20 +148,20 @@ class GraphicalUserInterface:
            
             self.pomodoroLabelHeader = Label(master= self.pomodoroFrame, 
                                              text= "Next break in: ", 
-                                             width= width, 
+                                             width= WIDTH, 
                                              **LABEL_STYLE_FROZEN)
             self.pomodoroLabelHeader.pack(fill= X, 
                                           expand= "yes")
 
             self.pomodoroTimeLabel = Label(master= self.pomodoroFrame, 
                                            text= "25:00", 
-                                           width= width, 
+                                           width= WIDTH, 
                                            **LABEL_STYLE_FROZEN)
 
             self.pomodoroTimeLabel.pack(fill= X, 
                                         expand= "yes")
 
-            self.startButton.config(command= lambda: self.updateBothTimer())
+            self.startButton.config(command= lambda: self.updateBothTimers())
 
             self.pomodoroItems = [self.pomodoroFrame, self.pomodoroLabelHeader, self.pomodoroTimeLabel, self.pomodoroInformationLabel, self.pomodoroButton]
             self.pomodoroActive = True
@@ -308,14 +308,14 @@ class GraphicalUserInterface:
         self.resultFrame.config(bg="grey")
 
         if (self.pomodoroActive == True) and (self.pomodoroObject.getPomodoroActive() == False):
-            self.startButton.config(command=lambda: self.updateBothTimer(), text="Continue working")
+            self.startButton.config(command=lambda: self.updateBothTimers(), text="Continue working")
 
         else:
             self.startButton.config(command=lambda: self.updateWorkTimeLabel(), text="Continue working")
         self.resetButton.config(command=lambda: self.resetClockInterface())
 
 
-    def updateBothTimer(self):
+    def updateBothTimers(self):
         """Starts both timers, pomodoro and work timer after one returns from amking a break."""
 
         self.updateWorkTimeLabel()
@@ -324,7 +324,7 @@ class GraphicalUserInterface:
 
 def main() -> None:
     cl = Clock(0, 0, 0)
-    pm = PomodoroClock()
+    pm = PomodoroClock(24, 60, SHORTBREAK, LONGBREAK)
     gui = GraphicalUserInterface(cl, pm)
 
 if __name__ == "__main__":
