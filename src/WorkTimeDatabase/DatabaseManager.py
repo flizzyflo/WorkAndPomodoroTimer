@@ -91,7 +91,7 @@ class DatabaseManager:
     def connect_to_database(self, database_name: str) -> sl.Connection:
         
         """
-        Connects to the database to allow changing the data. Returns the conneczion object.
+        Connects to the database to allow changing the data. Returns the connection object.
         """
         
         connection_to_database = sl.connect(database_name)
@@ -153,20 +153,3 @@ class DatabaseManager:
         
         self.connection.commit()
 
-
-
-# DATABASE_NAME = "src/WorkTimeDatabase/work_time_db.db"
-# TABLE_NAME = "work_time_table"
-
-# db_o = DatabaseManager(DATABASE_NAME, TABLE_NAME)
-
-# db_o.maintain_database_entry(datetime.date(2022,10,9), "04:00:00")
-# db_o.maintain_database_entry(datetime.date(1989,5,26), "08:00:00")
-# db_o.maintain_database_entry(datetime.date(1993,2,4), "04:00:00")
-
-# db_o.maintain_database_entry(datetime.date(2022,11,11), "07:11:11")
-
-# database_entries = db_o.fetch_database_entries()
-
-# db_o.commit_work()
-# db_o.create_csv_file(database_entries)
