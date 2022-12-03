@@ -312,10 +312,6 @@ class GraphicalUserInterface(Tk):
         """Stops work timer from counting"""
 
         self.timeLabel.destroy()
-        # self.timeLabel.destroy()
-        # self.timeLabel.destroy()
-        # self.timeLabel.destroy()
-        # self.timeLabel.destroy()
         
         work_time = str(self.clock_object)
         self.timeLabel = Label(master= self.resultFrame, text= work_time, **LABEL_STYLE_FROZEN)
