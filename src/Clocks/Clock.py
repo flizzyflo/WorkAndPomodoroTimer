@@ -76,14 +76,15 @@ class Clock:
         """Main method to count and get information of the work time clock object
         about the work time itself."""
 
-        if self.getSeconds() == 60:
+        if self.getMinutes() == 60:
+            self.increaseHours()
+            self.setMinutes()
+
+        elif self.getSeconds() + 1 == 60:
             self.increaseMinutes()
             self.setSeconds()
 
         else:
             self.increaseSeconds()
 
-        if self.getMinutes() == 60:
-            self.increaseHours()
-            self.setMinutes()
 
