@@ -1,8 +1,9 @@
 
-import sqlite3 as sl
 import datetime
 import os
-from Settings.Settings import EXPORT_HEADLINE
+import sqlite3 as sl
+
+from src.settings.settings import EXPORT_HEADLINE
 
 
 class DatabaseManager:
@@ -33,7 +34,6 @@ class DatabaseManager:
 
         self.commit_work()
 
-
     def __update_work_time_entry(self, year: int, month: int, day: int, duration: str) -> None:
 
         """Updates an entry given within the database entry. Selection criteria are the year, month and day."""
@@ -49,7 +49,6 @@ class DatabaseManager:
                             AND month == {month} 
                             AND day == {day}
                             """)
-
 
     def __insert_work_time_duration(self, year: int, month: int, day: int, duration: str) -> None:
 
@@ -70,7 +69,6 @@ class DatabaseManager:
 
         self.connection.commit()
 
-
     def create_table(self, db_table_name: str) -> None:
         
         """
@@ -87,16 +85,14 @@ class DatabaseManager:
                         seconds varchar)
                         """)
 
-
     def connect_to_database(self, database_name: str) -> sl.Connection:
         
         """
         Connects to the database to allow changing the data. Returns the connection object.
         """
-        
+
         connection_to_database = sl.connect(database_name)
         return connection_to_database
-
 
     def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> list[tuple[str]]:
         
@@ -108,7 +104,6 @@ class DatabaseManager:
                                             AND month == {month_filter} 
                                             AND day == {day_filter}
                                             """).fetchall()
-
 
     def fetch_all_database_entries(self, year_filter: int = None, month_filter: int = None) -> list[tuple[str]]:
         
@@ -131,8 +126,7 @@ class DatabaseManager:
                                             FROM {self.table_name} 
                                             """).fetchall()
 
-
-    def create_csv_file(self, path: str) -> None:
+    def save_csv_file_to_path(self, path: str) -> None:
         database_entries = self.fetch_all_database_entries()
         with open(os.path.join(path, "total_worktime_overview_export.csv"), "w") as exported_work_time_file:
             exported_work_time_file.write(EXPORT_HEADLINE)
@@ -145,7 +139,6 @@ class DatabaseManager:
                 result += "\n"
 
                 exported_work_time_file.write(result)
-
 
     def commit_work(self) -> None:
         
