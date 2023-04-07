@@ -5,7 +5,7 @@ PROGRAMM_TITLE = "WorkTime Tracking"
 WIDTH = 30
 
 ### Database constants
-DATABASE_NAME = "src/WorkTimeDatabase/work_time_db.db"
+DATABASE_NAME = "/Applications/ProgrammingFiles/Python/Published/WorkTimer/src/database/work_time.db"
 TABLE_NAME = "work_time_table"
 EXPORT_HEADLINE = "day;month;year;hours;minutes;seconds\n"
 
@@ -28,12 +28,12 @@ LABEL_STYLE_ACTIVE ={"background": TITLE_BACKGROUND_COLOR_ACTIVE,
                     "foreground": TITLE_FONT_COLOR, 
                     "font": ('calibri', 30, 'bold')}
 
-### Window Size Settings
+### Window Size settings
 FRAMESIZE = "500x500"
 MIN_SIZE= (500, 500)
 MAX_SIZE= (500, 500)
 
-### Pomodoro Break Settings and Duration Settings
+### Pomodoro Break settings and Duration settings
 LONGBREAK = 20
 SHORTBREAK = 5
 POMODOROMINUTES = 24
