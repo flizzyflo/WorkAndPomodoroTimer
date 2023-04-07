@@ -2,7 +2,6 @@
 import datetime
 import os
 import sqlite3 as sl
-from typing import Self
 
 from src.settings.settings import EXPORT_HEADLINE
 
@@ -18,9 +17,9 @@ class DatabaseManager:
         self.create_table(table_name)
 
     @staticmethod
-    def data_already_exist(database_object: Self) -> bool:
+    def entry_already_exist(database_object: 'DatabaseManager') -> bool:
 
-        """Returns True if already an database entry for the todays date exists."""
+        """Returns True if already a database entry for todays date exists."""
 
         year, month, day = str(datetime.date.today()).split("-")
         entry_exists = len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day)) > 0
@@ -83,7 +82,7 @@ class DatabaseManager:
     def create_table(self, db_table_name: str) -> None:
         
         """
-        Initially creates the work time table within the database.
+        Initially creates the work time-table within the database.
         """
 
         self.cursor.execute(f"""
