@@ -12,7 +12,9 @@ class MenuInformation:
     @staticmethod
     def show_version_information(current_version_number: str) -> None:
         messagebox.showinfo("Changelog & Version information", 
-        f"""-Current Version: {current_version_number}: Improved class structure of timer and pomodoro class.
+        f"""-Current Version: {current_version_number}: Massive code refactoring, implemented hour-/minutewise 
+        boundaries, improved counting logic, added possibility to continue existing worktime data.
+        \n-Version 1.7: Improved class structure of timer and pomodoro class.
         \n-Version 1.6: Code Refactoring. Implemented a database to collect working time.
         \n-Version 1.5: Implemented random selection of break information shown in message window. Made application displayed always in foreground.
         \n-Version 1.4: Implementation of Pomodoro Counter as additional feature. Accessible via Settings -> Pomodoro Timer. More refactoring of code.
