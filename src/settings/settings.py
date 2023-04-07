@@ -1,4 +1,4 @@
-
+from enum import Enum
 
 PROGRAMM_VERSION = "1.7"
 PROGRAMM_TITLE = "WorkTime Tracking"
@@ -33,12 +33,24 @@ FRAMESIZE = "500x500"
 MIN_SIZE= (500, 500)
 MAX_SIZE= (500, 500)
 
-### Pomodoro Break settings and Duration settings
-LONGBREAK = 20
-SHORTBREAK = 5
-POMODOROMINUTES = 24
-POMODOROSECONDS = 60
 
-### work time barriers
-NORMAL_DAILY_WORK_TIME = 8
-MAX_DAILY_WORK_TIME = 10
+class PomodoroTimes(Enum):
+
+    """
+    Pomodoro Break settings and Duration settings
+    """
+
+    LONGBREAK = 20
+    SHORTBREAK = 5
+    POMODOROMINUTES = 24
+    POMODOROSECONDS = 60
+
+
+class WorkTimeBarriers(Enum):
+
+    """
+    work time barriers
+    """
+
+    NORMAL_DAILY_WORK_TIME = 1
+    MAX_DAILY_WORK_TIME = 2
