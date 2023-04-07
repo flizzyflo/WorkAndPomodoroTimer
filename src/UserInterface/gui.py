@@ -6,9 +6,9 @@ from tkinter import Tk, BOTH, DISABLED, NORMAL, X, Button, Label, LabelFrame, me
 from src.clocks.pomodoroclock import PomodoroClock
 from src.clocks.worktimeclock import WorkTimeClock
 from src.database.databasemanager import DatabaseManager
-from src.settings.settings import MAX_DAILY_WORK_TIME, NORMAL_DAILY_WORK_TIME, POMODOROMINUTES, POMODOROSECONDS, \
-    PROGRAMM_TITLE, TITLE_FONT_COLOR, PROGRAMM_VERSION, FONTDICT, BUTTON_STYLE, LABEL_STYLE_ACTIVE, LABEL_STYLE_FROZEN, \
-    TITLE_BACKGROUND_COLOR_FROZEN, WIDTH
+from src.settings.settings import PROGRAMM_TITLE, TITLE_FONT_COLOR, PROGRAMM_VERSION, FONTDICT, BUTTON_STYLE, \
+    LABEL_STYLE_ACTIVE, LABEL_STYLE_FROZEN, \
+    TITLE_BACKGROUND_COLOR_FROZEN, WIDTH, WorkTimeBarriers, PomodoroTimes
 from src.userinterface.menuinformation import MenuInformation
 
 
@@ -26,8 +26,8 @@ class GraphicalUserInterface(Tk):
 
         self.database_object = database_object
         self.pomodoro_is_enabled: bool = False
-        self.pomodoro_object: object = pomodoroObject
-        self.clock_object: object = clock_object
+        self.pomodoro_object: PomodoroClock = pomodoroObject
+        self.clock_object: WorkTimeClock = clock_object
         self.current_version: str = PROGRAMM_VERSION
 
         self.initializeMenues()
@@ -130,61 +130,61 @@ class GraphicalUserInterface(Tk):
 ### From here on downwards are the pomodoro clock gui methods ###
 #################################################################
 
-
     def initializePomodoroGUI(self) -> None:
         """Initializes the pomodoro GUI. Called via menubar"""
 
-        if self.pomodoro_is_enabled == False:
+        if self.pomodoro_is_enabled is False:
 
-            self.pomodoroFrame = LabelFrame(master= self, 
+            self.pomodoroFrame = LabelFrame(master=self,
                                             bg="grey")
 
             self.pomodoroFrame.pack(fill=BOTH, 
                                     expand="yes")
 
-            self.pomodoroButton = Button(master= self.pomodoroFrame, 
-                                         text= "Start Pomodoro", 
-                                         font= FONTDICT, 
-                                         width= 10, 
-                                         activebackground = "#eb9234", 
-                                         bg= "#e87807", 
-                                         command= lambda: self.managePomodoroTimer(initial= True))
-            self.pomodoroButton.pack(fill= X, 
-                                     expand= "yes")
+            self.pomodoroButton = Button(master=self.pomodoroFrame,
+                                         text="Start Pomodoro",
+                                         font=FONTDICT,
+                                         width=10,
+                                         activebackground="#eb9234",
+                                         bg="#e87807",
+                                         command=lambda: self.managePomodoroTimer(initial= True))
+            self.pomodoroButton.pack(fill=X,
+                                     expand="yes")
 
 
             self.pomodoroInformationLabel = Label(master= self.pomodoroFrame, 
-                                                  text= f"Breaks: {self.pomodoro_object.getBreakCounter() }  |  Next break duration: {self.pomodoro_object.getBreakTime()} min.", 
-                                                  width= WIDTH, 
-                                                  bg= TITLE_BACKGROUND_COLOR_FROZEN, 
-                                                  fg= TITLE_FONT_COLOR, 
-                                                  font= ('calibri', 15, 'bold'))
+                                                  text=f"Breaks: {self.pomodoro_object.getBreakCounter() }  |  Next break duration: {self.pomodoro_object.getBreakTime()} min.",
+                                                  width=WIDTH,
+                                                  bg=TITLE_BACKGROUND_COLOR_FROZEN,
+                                                  fg=TITLE_FONT_COLOR,
+                                                  font=('calibri', 15, 'bold'))
            
-            self.pomodoroInformationLabel.pack(fill= X, 
-                                               expand= "yes")
+            self.pomodoroInformationLabel.pack(fill=X,
+                                               expand="yes")
            
-            self.pomodoroLabelHeader = Label(master= self.pomodoroFrame, 
-                                             text= "Next break in: ", 
-                                             width= WIDTH, 
+            self.pomodoroLabelHeader = Label(master=self.pomodoroFrame,
+                                             text="Next break in: ",
+                                             width=WIDTH,
                                              **LABEL_STYLE_FROZEN)
-            self.pomodoroLabelHeader.pack(fill= X, 
-                                          expand= "yes")
+            self.pomodoroLabelHeader.pack(fill=X,
+                                          expand="yes")
 
-            self.pomodoroTimeLabel = Label(master= self.pomodoroFrame, 
-                                           text= "25:00", 
-                                           width= WIDTH, 
+            self.pomodoroTimeLabel = Label(master=self.pomodoroFrame,
+                                           text="25:00",
+                                           width=WIDTH,
                                            **LABEL_STYLE_FROZEN)
 
             self.pomodoroTimeLabel.pack(fill= X, 
-                                        expand= "yes")
+                                        expand="yes")
 
-            self.startButton.config(command= lambda: self.updateBothTimers())
+            self.startButton.config(command=lambda: self.updateBothTimers())
 
             self.pomodoroItems = [self.pomodoroFrame, self.pomodoroLabelHeader, self.pomodoroTimeLabel, self.pomodoroInformationLabel, self.pomodoroButton]
             self.pomodoro_is_enabled = True
 
         else:
-            self.deactivatePomodoroGUI(minutes= POMODOROMINUTES, seconds= POMODOROSECONDS)
+            self.deactivatePomodoroGUI(minutes=PomodoroTimes.POMODOROMINUTES.value,
+                                       seconds=PomodoroTimes.POMODOROSECONDS.value)
 
 
     def deactivatePomodoroGUI(self, minutes: int, seconds: int) -> None:
@@ -193,64 +193,62 @@ class GraphicalUserInterface(Tk):
         for pomodoroItem in self.pomodoroItems:
             pomodoroItem.destroy()
 
-        self.pomodoro_object.resetClock(minutes= minutes, seconds= seconds)
+        self.pomodoro_object.resetClock(minutes=minutes, seconds=seconds)
         self.pomodoro_object.resetBreakCounter()
 
         self.pomodoro_is_enabled = False
-
 
     def countPomodoroTimer(self) -> None:
         """Checks minutes and seconds of the pomodoro counter. Increases break counter
         and manages clock counting in general."""
 
-        self.pomodoro_object.countPomodoroTimer(seconds= 60)
+        self.pomodoro_object.countPomodoroTimer(seconds=60)
 
         if (self.pomodoro_object.getMinutes() == 0) & (self.pomodoro_object.getSeconds() == 0):
             self.stopPomodoroCounting()
     
-
     def updatePomodoroBackgroundColor(self, color: str) -> None:
         """Manages the background colorization of the pomodoro counter GUI."""
 
-        self.pomodoroTimeLabel.config(text= self.pomodoro_object,  
-                                      bg= color)
-        self.pomodoroLabelHeader.config(bg= color)
-        self.pomodoroFrame.config(bg= color)
-        self.pomodoroInformationLabel.config(bg= color, 
-                                             text= f"Breaks: {self.pomodoro_object.getBreakCounter() }  |  Next break duration: {self.pomodoro_object.getBreakTime()} min.")
+        self.pomodoroTimeLabel.config(text=self.pomodoro_object,
+                                      bg=color)
+        self.pomodoroLabelHeader.config(bg=color)
+        self.pomodoroFrame.config(bg=color)
+        self.pomodoroInformationLabel.config(bg=color,
+                                             text=f"Breaks: {self.pomodoro_object.getBreakCounter() }  |  Next break duration: {self.pomodoro_object.getBreakTime()} min.")
             
 
     def stopPomodoroCounting(self):
         """Stops the count of the pomodoro counter"""
         
         self.pomodoro_object.setPomodoroActive(False)
-        self.pomodoroButton.config(state= NORMAL, command= lambda: self.managePomodoroTimer(initial= True))
-
+        self.pomodoroButton.config(state=NORMAL,
+                                   command=lambda: self.managePomodoroTimer(initial= True))
 
     def managePomodoroTimer(self, initial: bool = False) -> None:
         """Main method for updating the counting gui of the pomodoro clock. Calls several submethods."""
 
         if initial:
-            self.pomodoroButton.config(state= DISABLED)
+            self.pomodoroButton.config(state=DISABLED)
 
         self.pomodoro_object.setPomodoroActive(True)
         self.countPomodoroTimer()
 
-        if self.pomodoro_object.getPomodoroActive() == False:
-            self.pomodoro_object.resetClock(minutes= POMODOROMINUTES, seconds= POMODOROSECONDS)
-            self.updatePomodoroBackgroundColor(color= "grey")
+        if not self.pomodoro_object.is_active():
+            self.pomodoro_object.resetClock(minutes=PomodoroTimes.POMODOROMINUTES.value,
+                                            seconds=PomodoroTimes.POMODOROSECONDS.value)
+            self.updatePomodoroBackgroundColor(color="grey")
             self.informAboutBreak()
 
         else:
-            self.updatePomodoroBackgroundColor(color= "green")
+            self.updatePomodoroBackgroundColor(color="green")
             self.pomodoroTimeLabel.after(1000, lambda: self.managePomodoroTimer())
         
-
     def informAboutBreak(self):
-        """Brings up a pop up window informing a user about the necessity of a break"""
+        """Brings up a pop-up window informing a user about the necessity of a break"""
 
-        messagebox.showwarning(title= f"Overwhelming! You are so hardworking!", 
-                               message= f"{MenuInformation.returnRandomBreakMessage(self.pomodoro_object)}")
+        messagebox.showwarning(title=f"Overwhelming! You are so hardworking!",
+                               message=f"{MenuInformation.returnRandomBreakMessage(self.pomodoro_object)}")
 
 
 ##################################################################
@@ -266,26 +264,25 @@ class GraphicalUserInterface(Tk):
         
         self.startButton.config(text="Start working", command=lambda: self.updateWorkTimeLabel())
         self.resetButton.config(state=DISABLED, bg="#FA9632")
-        self.timeLabel.config(text= self.clock_object)
-
+        self.timeLabel.config(text=self.clock_object)
 
     def updateBackgroundColour(self) -> None:
         """Updates the background color of the work time labels depending on the working time one works"""
 
-        if MAX_DAILY_WORK_TIME > self.clock_object.get_hours() >= NORMAL_DAILY_WORK_TIME:
+        if WorkTimeBarriers.MAX_DAILY_WORK_TIME.value > self.clock_object.get_hours() >= WorkTimeBarriers.NORMAL_DAILY_WORK_TIME.value:
             self.timeLabel.config(bg="yellow")
-            self.timeLabelHeader.config(bg= "yellow")
-            self.resultFrame.config(bg= "yellow")
+            self.timeLabelHeader.config(bg="yellow")
+            self.resultFrame.config(bg="yellow")
         
-        elif self.clock_object.get_hours() >= MAX_DAILY_WORK_TIME:
+        elif self.clock_object.get_hours() >= WorkTimeBarriers.MAX_DAILY_WORK_TIME.value:
             self.timeLabel.config(bg="red")
-            self.timeLabelHeader.config(bg= "red")
-            self.resultFrame.config(bg= "red")
+            self.timeLabelHeader.config(bg="red")
+            self.resultFrame.config(bg="red")
 
         else:
             self.timeLabel.config(**LABEL_STYLE_ACTIVE)
             self.timeLabelHeader.config(**LABEL_STYLE_ACTIVE)
-            self.resultFrame.config(bg = "green")
+            self.resultFrame.config(bg="green")
 
     def updateWorkTimeLabel(self) -> None:
         """Calls several submethods. Updates the visualization of the work timer and presents 
@@ -294,7 +291,7 @@ class GraphicalUserInterface(Tk):
         self.updateBackgroundColour()
         self.clock_object.count_time()
         self.recolorStartStopButtonText()
-        self.timeLabel.config(text= self.clock_object)
+        self.timeLabel.config(text=self.clock_object)
         self.timeLabel.after(1000, lambda: self.updateWorkTimeLabel())
 
 
@@ -322,7 +319,7 @@ class GraphicalUserInterface(Tk):
 
         self.database_object.maintain_database_entry(datetime.date.today(), work_time)
 
-        if (self.pomodoro_is_enabled is True) and (self.pomodoro_object.getPomodoroActive() == False):
+        if (self.pomodoro_is_enabled is True) and not self.pomodoro_object.is_active():
             self.startButton.config(command=lambda: self.updateBothTimers(), text="Continue working")
 
         else:
@@ -330,7 +327,7 @@ class GraphicalUserInterface(Tk):
         self.resetButton.config(command=lambda: self.resetClockInterface())
 
     def updateBothTimers(self):
-        """Starts both timers, pomodoro and work timer after one returns from amking a break."""
+        """Starts both timers, pomodoro and work timer after one returns from making a break."""
 
         self.updateWorkTimeLabel()
         self.managePomodoroTimer(initial=True)
