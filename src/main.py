@@ -16,13 +16,15 @@ if __name__ == "__main__":
         fetched_data = database_object.fetch_single_entry(year_filter=year,
                                                           month_filter=month,
                                                           day_filter=day)
+
         fetched_data = fetched_data[0]
         stored_hours, stored_minutes, stored_seconds = fetched_data[3:]
 
         answer = messagebox.askquestion(title="Continue existing data",
                                         message=f"""Already stored data for today.
                                                 \nDo you want to continue existing data?
-                                                Stored data is: {int(stored_hours):02.0f} : {int(stored_minutes):02.0f} : {int(stored_seconds):02.0f} (hh:mm:ss).
+                                                Stored data is: {int(stored_hours):02.0f} : {int(stored_minutes):02.0f} 
+                                                : {int(stored_seconds):02.0f} (hh:mm:ss).
                                                 \nIf 'No', it will be overriden.""")
 
         if answer == "yes":
