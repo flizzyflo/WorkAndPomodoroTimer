@@ -2,6 +2,7 @@
 import datetime
 import os
 import sqlite3 as sl
+from typing import Self
 
 from src.settings.settings import EXPORT_HEADLINE
 
@@ -16,27 +17,36 @@ class DatabaseManager:
         self.cursor = self.connection.cursor()
         self.create_table(table_name)
 
+    @staticmethod
+    def data_already_exist(database_object: Self) -> bool:
+
+        """Returns True if already an database entry for the todays date exists."""
+
+        year, month, day = str(datetime.date.today()).split("-")
+
+        return len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day)) > 0
+
     def maintain_database_entry(self, date: datetime.date, duration: str) -> None:
 
         year, month, day = str(date).split("-")
 
         if len(self.fetch_single_entry(year, month, day)) > 0:
-            self.__update_work_time_entry(year= year, 
-                                          month= month, 
-                                          day= day, 
-                                          duration= duration)
+            self.__update_work_time_entry(year=year,
+                                          month=month,
+                                          day=day,
+                                          duration=duration)
         
         else:
-            self.__insert_work_time_duration(year= year, 
-                                             month= month, 
-                                             day= day, 
-                                             duration= duration)
+            self.__insert_work_time_duration(year=year,
+                                             month=month,
+                                             day=day,
+                                             duration=duration)
 
         self.commit_work()
 
     def __update_work_time_entry(self, year: int, month: int, day: int, duration: str) -> None:
 
-        """Updates an entry given within the database entry. Selection criteria are the year, month and day."""
+        """Updates an entry given within the database entry. Keys are the year, month and day."""
 
         if not self.connection:
             self.connection = self.connect_to_database(self.database_name)
