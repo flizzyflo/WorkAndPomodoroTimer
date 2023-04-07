@@ -1,7 +1,7 @@
 from enum import Enum
 
-PROGRAMM_VERSION: str = "1.7"
-PROGRAMM_TITLE: str = "WorkTime Tracking"
+PROGRAMM_VERSION: str = "1.8"
+PROGRAMM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
 ### Database constants
