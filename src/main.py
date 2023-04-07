@@ -39,8 +39,8 @@ if __name__ == "__main__":
     # no information stored according current date or no desire to continue existing information
     if not DatabaseManager.data_already_exist(database_object=database_object) or continue_existing_worktime_data == "no":
         clock = WorkTimeClock(initial_hours=0,
-                              initial_minutes=0,
-                              initial_seconds=0)
+                              initial_minutes=59,
+                              initial_seconds=57)
 
     # pomodoro = PomodoroClock(24, 60, SHORTBREAK, LONGBREAK)
 
