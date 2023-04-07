@@ -1,15 +1,15 @@
 from random import randint
 from tkinter import messagebox
 
+
 class MenuInformation:
 
-    
-
+    @staticmethod
     def show_menubar_information() -> None:
         messagebox.showinfo("About this application...", 
                             f"""This application was programmed in Python 3.11.0 by Florian Lübke.\nThis project is explicitly seen as freeware and can be provided to anyone who is interested in it.\nEnjoy tracking your work-time!""")
 
-
+    @staticmethod
     def show_version_information(current_version_number: str) -> None:
         messagebox.showinfo("Changelog & Version information", 
         f"""-Current Version: {current_version_number}: Improved class structure of timer and pomodoro class.
@@ -21,7 +21,7 @@ class MenuInformation:
         \n-Version 1.1: Added more interaktive Buttons and a light-system with yellow and red warning lightning to indicate whether one works too long. Merged the Start and Stop Button to an interactive button.
         \n-Version 1.0: Initial creation of the whole application.""")
 
-        
+    @staticmethod
     def returnRandomBreakMessage(pomodoroObject: object):
 
         messages = [f"You should take a break. Your break should last {pomodoroObject.getBreakTime()} minutes. After that, you will be even more productive, I promise!",
