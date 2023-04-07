@@ -17,14 +17,14 @@ class WorkTimeClock(Clock):
         about the work time itself."""
 
         if self.get_minutes() == 60:
-            self.increase_hours_by()
-            self.set_minutes_to()
+            self.increase_hours_by(hours=1)
+            self.set_minutes_to(minutes=0)
 
         elif self.get_seconds() + 1 == 60:
-            self.increase_minutes_by()
-            self.set_seconds_to()
+            self.increase_minutes_by(minutes=1)
+            self.set_seconds_to(seconds=0)
 
         else:
-            self.increase_seconds_by()
+            self.increase_seconds_by(seconds=1)
 
 
