@@ -8,17 +8,17 @@ from src.userinterface.gui import GraphicalUserInterface
 
 if __name__ == "__main__":
 
-    database_object: DatabaseManager = DatabaseManager(database_name=DATABASE_NAME,
-                                                       table_name=TABLE_NAME)
+    worktime_database: DatabaseManager = DatabaseManager(database_name=DATABASE_NAME,
+                                                         table_name=TABLE_NAME)
 
     continue_existing_worktime_data: str = "no"
 
-    if DatabaseManager.data_already_exist(database_object=database_object):
+    if DatabaseManager.entry_already_exist(database_object=worktime_database):
         current_date: str = str(datetime.date.today())
         year, month, day = current_date.split("-")
-        fetched_data = database_object.fetch_single_entry(year_filter=year,
-                                                          month_filter=month,
-                                                          day_filter=day)[0]
+        fetched_data = worktime_database.fetch_single_entry(year_filter=year,
+                                                            month_filter=month,
+                                                            day_filter=day)[0]
 
         # grab hours, minutes and seconds from data tuple
         stored_hours, stored_minutes, stored_seconds = fetched_data[3:]
@@ -37,14 +37,14 @@ if __name__ == "__main__":
                                   initial_seconds=int(stored_seconds))
 
     # no information stored according current date or no desire to continue existing information
-    if not DatabaseManager.data_already_exist(database_object=database_object) or continue_existing_worktime_data == "no":
+    if not DatabaseManager.entry_already_exist(database_object=worktime_database) or continue_existing_worktime_data == "no":
         clock = WorkTimeClock(initial_hours=0,
-                              initial_minutes=59,
-                              initial_seconds=57)
+                              initial_minutes=0,
+                              initial_seconds=0)
 
     # pomodoro = PomodoroClock(24, 60, SHORTBREAK, LONGBREAK)
 
     gui = GraphicalUserInterface(clock_object=clock,
-                                 database_object=database_object)
+                                 database_object=worktime_database)
     
     gui.mainloop()
