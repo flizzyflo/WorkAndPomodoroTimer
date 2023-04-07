@@ -13,6 +13,8 @@ class PomodoroClock(Clock):
     def __repr__(self) -> str:
         return f"{self.getMinutes():02.0f}:{self.getSeconds():02.0f}"
 
+    def is_active(self) -> bool:
+        return self.pomodoroActive
 
     def setPomodoroActive(self, active: bool) -> None:
         self.pomodoroActive = active
