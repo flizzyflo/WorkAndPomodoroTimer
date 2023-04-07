@@ -1,4 +1,5 @@
 from src.clocks.clock import Clock
+from src.settings.settings import HOUR, MINUTE
 
 
 class WorkTimeClock(Clock):
@@ -16,13 +17,13 @@ class WorkTimeClock(Clock):
         """Main method to count and get information of the work time clock object
         about the work time itself."""
 
-        if self.get_minutes() == 60:
-            self.increase_hours_by(hours=1)
-            self.set_minutes_to(minutes=0)
-
-        elif self.get_seconds() + 1 == 60:
+        if self.get_seconds() + 1 == MINUTE:
             self.increase_minutes_by(minutes=1)
             self.set_seconds_to(seconds=0)
+
+            if self.get_minutes() == HOUR:
+                self.increase_hours_by(hours=1)
+                self.set_minutes_to(minutes=0)
 
         else:
             self.increase_seconds_by(seconds=1)
