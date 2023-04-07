@@ -1,6 +1,6 @@
-# from Settings.Settings import 
+from src.clocks.clock import Clock
 
-class PomodoroClock:
+class PomodoroClock(Clock):
     
     def __init__(self, minutes: int, seconds: int, breaktimeShort: int, breaktimeLong: int) -> None:
         self.minutes: int = minutes
