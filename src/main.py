@@ -8,9 +8,9 @@ if __name__ == "__main__":
 
     database_object = DatabaseManager(database_name=DATABASE_NAME,
                                       table_name=TABLE_NAME)
-    clock = WorkTimeClock(initial_hours=0,
-                          initial_minutes=0,
-                          initial_seconds=0)
+    clock = WorkTimeClock(initial_hours=1,
+                          initial_minutes=59,
+                          initial_seconds=58)
 
     # pomodoro = PomodoroClock(24, 60, SHORTBREAK, LONGBREAK)
 
