@@ -1,96 +1,69 @@
 from src.clocks.clock import Clock
 
+
 class PomodoroClock(Clock):
     
-    def __init__(self, minutes: int, seconds: int, breaktimeShort: int, breaktimeLong: int) -> None:
-        self.minutes: int = minutes
-        self.seconds: int = seconds
-        self.breakCounter: int = 0
-        self.breakTimeShort: int = breaktimeShort
-        self.breakTimeLong: int = breaktimeLong
-        self.pomodoroActive: bool = False
+    def __init__(self, minutes: int, seconds: int, break_time_short: int, break_time_long: int) -> None:
+        super().__init__(initial_minutes=minutes, initial_seconds=seconds, initial_hours=0)
+        self.break_count: int = 0
+        self.break_time_short: int = break_time_short
+        self.break_time_long: int = break_time_long
+        self.next_break_time: int = 0
+        self.pomodoro_is_active: bool = False
 
     def __repr__(self) -> str:
-        return f"{self.getMinutes():02.0f}:{self.getSeconds():02.0f}"
+        return f"{self.get_minutes():02.0f}:{self.get_seconds():02.0f}"
 
-    def is_active(self) -> bool:
-        return self.pomodoroActive
+    def pomodoro_is_active(self) -> bool:
+        return self.pomodoro_is_active
 
-    def setPomodoroActive(self, active: bool) -> None:
-        self.pomodoroActive = active
+    def set_pomodoro_active_to(self, *, active: bool) -> None:
+        self.pomodoro_is_active = active
     
+    def increase_break_counter_by(self, *, increase: int) -> None:
+        self.break_count += increase
 
-    def getPomodoroActive(self) -> bool:
-        return self.pomodoroActive
+    def set_break_time(self) -> None:
 
+        """Break-time depends on total count of breaks already taken."""
 
-    def increaseBreakCounter(self) -> None:
-        self.breakCounter += 1
-
-
-    def decreaseMinutes(self) -> None:
-        self.minutes -= 1
-
-
-    def decreaseSeconds(self) -> None:
-        self.seconds -= 1
-
-
-    def setMinutes(self, minutes: int) -> None:
-        self.minutes = minutes
-
-
-    def setSeconds(self, seconds: int) -> None:
-        self.seconds = seconds
-
-
-    def getMinutes(self) -> int:
-        return self.minutes
-
-
-    def getSeconds(self) -> int:
-        return self.seconds
-
-
-    def setBreakTime(self, breakTimeLong: int, breakTimeShort: int) -> None:
-        
-        if self.getBreakCounter() % 4 == 0 and (self.getBreakCounter() != 0):
-            self.breakTimeShort = breakTimeLong
+        if (self.get_break_counter() % 4 == 0) and (self.get_break_counter() != 0):
+            self.next_break_time = self.get_break_time_long()
 
         else:
-            self.breakTimeShort = breakTimeShort 
+            self.next_break_time = self.get_break_time_short()
 
+    def get_break_time_short(self) -> int:
+        return self.break_time_short
 
-    def getBreakTime(self) -> int:
-        return self.breakTimeShort
+    def get_break_time_long(self) -> int:
+        return self.break_time_long
 
+    def get_next_break_time(self) -> int:
+        return self.next_break_time
 
-    def getBreakCounter(self) -> int:
-        return self.breakCounter
+    def get_break_counter(self) -> int:
+        return self.break_count
 
+    def reset_clock(self) -> None:
+        super().reset_clock()
+        self.increase_break_counter_by(increase=1)
+        self.set_break_time()
 
-    def resetClock(self, minutes: int, seconds: int) -> None:
-        self.minutes, self.seconds = minutes, seconds
-        self.increaseBreakCounter()
-        self.setBreakTime(self.breakTimeLong, self.breakTimeShort)
+    def reset_break_counter(self) -> None:
+        self.break_count = 0
 
-
-    def resetBreakCounter(self) -> None:
-        self.breakCounter = 0
-
-
-    def countPomodoroTimer(self, seconds: int) -> None:
+    def count_pomodoro_timer(self, seconds: int) -> None:
         """Checks minutes and seconds of the pomodoro counter. Increases break counter
         and manages clock counting in general."""
         
-        if (self.getMinutes() == 0) & (self.getSeconds() == 0):
-            self.resetClock(minutes= self.getMinutes(), seconds= self.getSeconds())
-            self.setPomodoroActive(False)
+        if (self.get_minutes() == 0) & (self.get_seconds() == 0):
+            self.reset_clock()
+            self.set_pomodoro_active_to(active=False)
 
-        
-        elif self.getSeconds() == 0:
-            self.decreaseMinutes()
-            self.setSeconds(seconds)
+        elif self.get_seconds() == 0:
+            self.decrease_minutes_by(minutes=1)
+            self.set_seconds_to(seconds)
         
         else:
-            self.decreaseSeconds()
+            self.decrease_seconds_by(seconds=1)
