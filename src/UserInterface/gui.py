@@ -15,8 +15,8 @@ from src.userinterface.menuinformation import MenuInformation
 class GraphicalUserInterface(Tk):
 
     def __init__(self,
-                 clock_object: WorkTimeClock,
-                 database_object: DatabaseManager,
+                 work_time_clock: WorkTimeClock,
+                 database: DatabaseManager,
                  pomodoro_object: PomodoroClock = None) -> None:
         
         super().__init__()
@@ -24,14 +24,14 @@ class GraphicalUserInterface(Tk):
         self.title(PROGRAMM_TITLE)
         self.attributes("-topmost", True)
 
-        self.database_object = database_object
+        self.database = database
+        self.work_time_clock: WorkTimeClock = work_time_clock
         self.pomodoro_is_enabled: bool = False
         self.pomodoro_object: PomodoroClock = pomodoro_object
-        self.clock_object: WorkTimeClock = clock_object
-        self.current_version: str = PROGRAMM_VERSION
+        self.current_program_version: str = PROGRAMM_VERSION
         self.menubar: tkinter.Menu = None
         self.about_menu: tkinter.Menu = None
-        self.menu_information: tkinter.Menu = None
+        self.database_menu: tkinter.Menu = None
 
         self.pomodoroFrame = tkinter.LabelFrame = None
         self.pomodoroButton = tkinter.Button = None
@@ -54,32 +54,24 @@ class GraphicalUserInterface(Tk):
     def initialize_menues(self) -> None:
         """Sets up the menu bar to control the application"""
 
-        self.menubar = tkinter.Menu(self)
-        self.about_menu = tkinter.Menu(self.menubar)
+        self.menubar = tkinter.Menu(master=self)
+        self.about_menu = tkinter.Menu(master=self.menubar)
         self.about_menu.add_command(label="About",
                                     command=lambda: MenuInformation.show_menubar_information())
         self.about_menu.add_command(label="Version Information",
-                                    command=lambda: MenuInformation.show_version_information(current_version_number=self.current_version))
+                                    command=lambda: MenuInformation.show_version_information(current_version_number=self.current_program_version))
 
-        self.menu_information = tkinter.Menu(self.menubar)
-        self.menu_information.add_separator()
-        self.menu_information.add_command(label="Export work-time database entries",
-                                          command=lambda: self.export_data())
-        
-        self.menu_information.add_separator()
-        self.menu_information.add_command(label="Quit Work-Time-Tracker",
-                                          command=lambda: quit())
+        self.database_menu = tkinter.Menu(self.menubar)
+        self.database_menu.add_separator()
+        self.database_menu.add_command(label="Export work-time database entries",
+                                       command=lambda: self.export_data())
 
-        # self.settingsfiles = tkinter.Menu(self.menubar)
-        # self.settingsfiles.add_checkbutton(label="Pomodoro Timer", 
-        #                                    state= NORMAL, 
-        #                                    command= lambda: self.initializePomodoroGUI())
+        self.database_menu.add_separator()
+        self.database_menu.add_command(label="Quit Work-Time-Tracker",
+                                       command=lambda: quit())
 
         self.menubar.add_cascade(label="Database- & Program Management",
-                                 menu=self.menu_information)
-
-        # self.menubar.add_cascade(label= "settings",
-        #                          menu= self.settingsfiles)
+                                 menu=self.database_menu)
 
         self.menubar.add_cascade(label="About",
                                  menu=self.about_menu)
@@ -127,19 +119,21 @@ class GraphicalUserInterface(Tk):
                                            expand=1)
 
         self.worked_time_label = Label(master=self.work_time_frame,
-                                       text=self.clock_object.__repr__(),
+                                       text=self.work_time_clock.__repr__(),
                                        **LABEL_STYLE_FROZEN)
         self.worked_time_label.pack(fill=BOTH,
                                     expand=1)
 
     def export_data(self) -> None:
 
-        """Wrapper function to call the directory selection screen and insert the path selected into the
+        """
+        Wrapper function to call the directory selection screen and insert the path selected into the
         database object. The database object will create a csv file containing all the work data and
-        store it at the path selectted."""
+        store it at the path selected.
+        """
 
-        filepath = filedialog.askdirectory(title="Select dir for working data export:")
-        self.database_object.save_csv_file_to_path(filepath)
+        filepath = filedialog.askdirectory(title="Select directory to store working data export at:")
+        self.database.save_csv_file_to_path(path=filepath)
 
     def initialize_pomodoro(self) -> None:
 
@@ -195,8 +189,8 @@ class GraphicalUserInterface(Tk):
             self.pomodoro_is_enabled = True
 
         else:
-            self.deactivate_pomodoro(minutes=PomodoroTimes.POMODOROMINUTES.value,
-                                     seconds=PomodoroTimes.POMODOROSECONDS.value)
+            self.deactivate_pomodoro(minutes=PomodoroTimes.POMODORO_MINUTES.value,
+                                     seconds=PomodoroTimes.POMODORO_SECONDS.value)
 
     def deactivate_pomodoro(self, minutes: int, seconds: int) -> None:
         """Deactivates the pomodoro GUI. Called via settings in menubar"""
@@ -246,8 +240,8 @@ class GraphicalUserInterface(Tk):
         self.count_pomodoro()
 
         if not self.pomodoro_object.is_active():
-            self.pomodoro_object.resetClock(minutes=PomodoroTimes.POMODOROMINUTES.value,
-                                            seconds=PomodoroTimes.POMODOROSECONDS.value)
+            self.pomodoro_object.resetClock(minutes=PomodoroTimes.POMODORO_MINUTES.value,
+                                            seconds=PomodoroTimes.POMODORO_SECONDS.value)
             self.update_pomodoro_background(color="grey")
             self.show_break()
 
@@ -265,17 +259,17 @@ class GraphicalUserInterface(Tk):
         """Stops counting of the work time counter and sets it back to its inital state."""
 
         self.stop_counting_work_time()
-        self.clock_object.reset_clock()
+        self.work_time_clock.reset_clock()
         
         self.start_button.config(text="Start working",
                                  command=lambda: self.update_worked_time_label())
         self.reset_button.config(state=DISABLED,
                                  bg="#FA9632")
-        self.worked_time_label.config(text=self.clock_object.__repr__())
+        self.worked_time_label.config(text=self.work_time_clock.__repr__())
 
     def is_doing_overtime(self) -> bool:
-        reached_overtime_minutes: bool = self.clock_object.get_minutes() >= WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_MINUTES.value
-        reached_overtime_hours: bool = self.clock_object.get_hours() >= WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_HOURS.value
+        reached_overtime_minutes: bool = self.work_time_clock.get_minutes() >= WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_MINUTES.value
+        reached_overtime_hours: bool = self.work_time_clock.get_hours() >= WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_HOURS.value
         if reached_overtime_hours and reached_overtime_minutes:
             return True
 
@@ -283,8 +277,8 @@ class GraphicalUserInterface(Tk):
             return False
 
     def reached_worktime_maximum(self) -> bool:
-        reached_maximum_worktime_minutes: bool = self.clock_object.get_minutes() >= WorkTimeBarriers.MAX_DAILY_WORK_TIME_MINUTES.value
-        reached_maximum_worktime_hours: bool = self.clock_object.get_hours() >= WorkTimeBarriers.MAX_DAILY_WORK_TIME_HOURS.value
+        reached_maximum_worktime_minutes: bool = self.work_time_clock.get_minutes() >= WorkTimeBarriers.MAX_DAILY_WORK_TIME_MINUTES.value
+        reached_maximum_worktime_hours: bool = self.work_time_clock.get_hours() >= WorkTimeBarriers.MAX_DAILY_WORK_TIME_HOURS.value
 
         if reached_maximum_worktime_hours and reached_maximum_worktime_minutes:
             return True
@@ -315,9 +309,9 @@ class GraphicalUserInterface(Tk):
         the actual amount of time already worked"""
 
         self.update_worktimer_background()
-        self.clock_object.count_time()
+        self.work_time_clock.count_time()
         self.recolor_start_button()
-        self.worked_time_label.config(text=self.clock_object.__repr__())
+        self.worked_time_label.config(text=self.work_time_clock.__repr__())
         self.worked_time_label.after(1000, lambda: self.update_worked_time_label())
 
     def recolor_start_button(self) -> None:
@@ -338,7 +332,7 @@ class GraphicalUserInterface(Tk):
 
         self.worked_time_label.destroy()
         
-        work_time = str(self.clock_object)
+        work_time = str(self.work_time_clock)
         self.worked_time_label = Label(master=self.work_time_frame,
                                        text=work_time, **LABEL_STYLE_FROZEN)
         self.worked_time_label.pack(fill=BOTH,
@@ -346,7 +340,7 @@ class GraphicalUserInterface(Tk):
         self.work_time_headline_label.config(bg="grey")
         self.work_time_frame.config(bg="grey")
 
-        self.database_object.maintain_database_entry(datetime.date.today(), work_time)
+        self.database.maintain_database_entry(datetime.date.today(), work_time)
 
         if (self.pomodoro_is_enabled is True) and not self.pomodoro_object.is_active():
             self.start_button.config(command=lambda: self.update_timers(),
