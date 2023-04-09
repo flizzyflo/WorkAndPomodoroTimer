@@ -23,7 +23,7 @@ class DatabaseManager:
 
         year, month, day = str(datetime.date.today()).split("-")
         entry_exists = len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day)) > 0
-        database_object.commit_work()
+
         return entry_exists
 
     def maintain_database_entry(self, date: datetime.date, duration: str) -> None:
@@ -155,4 +155,3 @@ class DatabaseManager:
         """Commits any work done on database level"""
         
         self.connection.commit()
-
