@@ -4,8 +4,11 @@ PROGRAMM_VERSION: str = "1.8"
 PROGRAMM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
+
 ### Database constants
-DATABASE_NAME: str = "/Applications/ProgrammingFiles/Python/Published/WorkTimer/src/database/work_time.db"
+with open(file=r"/Applications/ProgrammingFiles/Python/Published/WorkTimer/src/database/database_filepath.txt", mode="r") as db_filepath:
+    filepath = db_filepath.read()
+DATABASE_NAME: str = rf"{filepath}"
 TABLE_NAME: str = "work_time_table"
 EXPORT_HEADLINE: str = "day;month;year;hours;minutes;seconds\n"
 
@@ -43,10 +46,10 @@ class PomodoroTimes(Enum):
     Pomodoro Break settings and Duration settings
     """
 
-    LONGBREAK: int = 20
-    SHORTBREAK: int = 5
-    POMODOROMINUTES: int = 24
-    POMODOROSECONDS: int = 60
+    LONG_BREAK: int = 20
+    SHORT_BREAK: int = 5
+    POMODORO_MINUTES: int = 24
+    POMODORO_SECONDS: int = 60
 
 
 class WorkTimeBarriers(Enum):
