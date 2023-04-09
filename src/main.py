@@ -1,21 +1,28 @@
 import datetime
 from tkinter import messagebox
 
-from src.clocks.worktimeclock import WorkTimeClock
-from src.database.databasemanager import DatabaseManager
-from src.settings.settings import DATABASE_NAME, TABLE_NAME
-from src.userinterface.gui import GraphicalUserInterface
+from clocks.worktimeclock import WorkTimeClock
+from database.databasemanager import DatabaseManager
+from settings.settings import DATABASE_NAME, TABLE_NAME
+from userinterface.gui import GraphicalUserInterface
 
 if __name__ == "__main__":
 
     worktime_database: DatabaseManager = DatabaseManager(database_name=DATABASE_NAME,
                                                          table_name=TABLE_NAME)
 
+    clock = WorkTimeClock(initial_hours=0,
+                          initial_minutes=0,
+                          initial_seconds=0)
+
     continue_existing_worktime_data: str = "no"
 
     if DatabaseManager.entry_already_exist(database_object=worktime_database):
+
+        # grab date as db key
         current_date: str = str(datetime.date.today())
         year, month, day = current_date.split("-")
+
         fetched_data = worktime_database.fetch_single_entry(year_filter=year,
                                                             month_filter=month,
                                                             day_filter=day)[0]
@@ -32,19 +39,11 @@ if __name__ == "__main__":
 
         if continue_existing_worktime_data == "yes":
 
-            clock = WorkTimeClock(initial_hours=int(stored_hours),
-                                  initial_minutes=int(stored_minutes),
-                                  initial_seconds=int(stored_seconds))
+            clock.set_hours_to(hours=int(stored_hours))
+            clock.set_minutes_to(minutes=int(stored_minutes))
+            clock.set_seconds_to(seconds=int(stored_seconds))
 
-    # no information stored according current date or no desire to continue existing information
-    if not DatabaseManager.entry_already_exist(database_object=worktime_database) or continue_existing_worktime_data == "no":
-        clock = WorkTimeClock(initial_hours=0,
-                              initial_minutes=0,
-                              initial_seconds=0)
-
-    # pomodoro = PomodoroClock(24, 60, SHORTBREAK, LONGBREAK)
-
-    gui = GraphicalUserInterface(clock_object=clock,
-                                 database_object=worktime_database)
+    gui = GraphicalUserInterface(work_time_clock=clock,
+                                 database=worktime_database)
     
     gui.mainloop()
