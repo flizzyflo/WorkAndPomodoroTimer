@@ -36,7 +36,7 @@ class DatabaseManager:
             self.__update_work_time_entry(year=year,
                                           month=month,
                                           day=day,
-                                          duration=work_time_duration)
+                                          work_time_duration=work_time_duration)
         
         else:
             self.__insert_work_time_duration(year=year,
@@ -46,14 +46,14 @@ class DatabaseManager:
 
         self.commit_work()
 
-    def __update_work_time_entry(self, year: int, month: int, day: int, duration: str) -> None:
+    def __update_work_time_entry(self, year: int, month: int, day: int, work_time_duration: str) -> None:
 
         """Updates an entry given within the database entry. Keys are the year, month and day."""
 
         if not self.connection:
             self.connection = self.connect_to_database(database=self.database_name)
     
-        hours, minutes, seconds = duration.split(":")
+        hours, minutes, seconds = work_time_duration.split(":")
 
         self.cursor.execute(f""" 
                             UPDATE {self.table_name} set hours= {hours}, minutes= {minutes}, seconds= {seconds} 
