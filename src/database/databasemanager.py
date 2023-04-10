@@ -2,9 +2,7 @@
 import datetime
 import os
 import sqlite3 as sl
-from collections import namedtuple
 
-from src.database.WorkTimeTuple import WorkTimeTuple
 from src.settings.settings import EXPORT_HEADLINE, DATABASE_INFORMATION_FIELDS
 
 
