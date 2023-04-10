@@ -4,7 +4,7 @@ from tkinter import messagebox
 from clocks.worktimeclock import WorkTimeClock
 from database.databasemanager import DatabaseManager
 from settings.settings import DATABASE_NAME, TABLE_NAME
-from src.database.WorkTimeTuple import WorkTimeTuple
+from src.database.work_time_information_tuple import WorkTimeInformationTuple
 from userinterface.gui import GraphicalUserInterface
 
 if __name__ == "__main__":
@@ -29,7 +29,7 @@ if __name__ == "__main__":
                                                             day_filter=day)
 
         # maps current values to field names
-        work_time_data = WorkTimeTuple(**fetched_data)
+        work_time_data = WorkTimeInformationTuple(**fetched_data)
 
         continue_existing_worktime_data = messagebox.askquestion(title="Continue existing data",
                                                                  message=f"""Already stored data for today.
