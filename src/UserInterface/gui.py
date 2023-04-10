@@ -342,7 +342,7 @@ class GraphicalUserInterface(Tk):
         self.work_time_headline_label.config(bg="grey")
         self.work_time_frame.config(bg="grey")
 
-        self.database.maintain_database_entry(datetime.date.today(), work_time)
+        self.database.maintain_database_entry(date=datetime.date.today(), work_time_duration=work_time)
 
         if (self.pomodoro_is_enabled is True) and not self.pomodoro_object.pomodoro_is_active():
             self.start_button.config(command=lambda: self.update_timers(),
