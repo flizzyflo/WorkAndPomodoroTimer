@@ -28,7 +28,7 @@ class DatabaseManager:
 
         return entry_exists
 
-    def maintain_database_entry(self, date: datetime.date, duration: str) -> None:
+    def maintain_database_entry(self, date: datetime.date, work_time_duration: str) -> None:
 
         year, month, day = str(date).split("-")
 
@@ -36,13 +36,13 @@ class DatabaseManager:
             self.__update_work_time_entry(year=year,
                                           month=month,
                                           day=day,
-                                          duration=duration)
+                                          duration=work_time_duration)
         
         else:
             self.__insert_work_time_duration(year=year,
                                              month=month,
                                              day=day,
-                                             duration=duration)
+                                             duration=work_time_duration)
 
         self.commit_work()
 
