@@ -16,7 +16,7 @@ class DatabaseManager:
         self.database_name = database_name
         self.connection = self.connect_to_database(database=self.database_name)
         self.cursor = self.connection.cursor()
-        self.create_table(table_name=table_name)
+        self.create_database_table(table_name=table_name)
 
     @staticmethod
     def entry_already_exists_in(*, database: 'DatabaseManager') -> bool:
@@ -79,9 +79,7 @@ class DatabaseManager:
                         VALUES ({day}, {month}, {year}, {hours}, {minutes}, {seconds})
                         """)
 
-        self.connection.commit()
-
-    def create_table(self, *, table_name: str) -> None:
+    def create_database_table(self, *, table_name: str) -> None:
         
         """
         Initially creates the work time-table within the database.
@@ -123,7 +121,7 @@ class DatabaseManager:
 
         return field_value_dictionary
 
-    def fetch_all_database_entries(self, *, year_filter: int = None, month_filter: int = None) -> list[tuple[str]]:
+    def fetch_all_database_entries_for_range(self, *, year_filter: int = None, month_filter: int = None) -> list[tuple[str]]:
         
         """Gets all the information stored within the database."""
         
@@ -139,13 +137,20 @@ class DatabaseManager:
                                             WHERE month == {month_filter}
                                             """).fetchall()
 
+        elif year_filter and month_filter:
+            return self.connection.execute(f"""SELECT * 
+                                            FROM {self.table_name}
+                                            WHERE year == {year_filter} 
+                                            AND month == {month_filter}
+                                            """).fetchall()
+
         else:
             return self.connection.execute(f"""SELECT * 
                                             FROM {self.table_name} 
                                             """).fetchall()
 
     def save_csv_file_to_path(self, *, path: str) -> None:
-        database_entries = self.fetch_all_database_entries()
+        database_entries = self.fetch_all_database_entries_for_range()
         with open(os.path.join(path, "total_worktime_overview_export.csv"), "w") as exported_work_time_file:
             exported_work_time_file.write(EXPORT_HEADLINE)
 
