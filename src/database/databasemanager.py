@@ -19,12 +19,12 @@ class DatabaseManager:
         self.create_table(table_name)
 
     @staticmethod
-    def entry_already_exist(database_object: 'DatabaseManager') -> bool:
+    def entry_already_exist_in(database: 'DatabaseManager') -> bool:
 
         """Returns True if already a database entry for todays date exists."""
 
         year, month, day = str(datetime.date.today()).split("-")
-        entry_exists = len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day).keys()) > 0
+        entry_exists = len(database.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day).keys()) > 0
 
         return entry_exists
 
@@ -107,7 +107,7 @@ class DatabaseManager:
         connection_to_database = sl.connect(database_name)
         return connection_to_database
 
-    def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> dict[str, int|str]:
+    def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> dict[str, int | str]:
         
         """Gets a single entry from the database according to the input values given."""
         

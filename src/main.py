@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     continue_existing_worktime_data: str = "no"
 
-    if DatabaseManager.entry_already_exist(database_object=worktime_database):
+    if DatabaseManager.entry_already_exist_in(database=worktime_database):
 
         # grab date as db key
         current_date: str = str(datetime.date.today())
@@ -34,8 +34,7 @@ if __name__ == "__main__":
         continue_existing_worktime_data = messagebox.askquestion(title="Continue existing data",
                                                                  message=f"""Already stored data for today.
                                                 \nDo you want to continue existing data?
-                                                Stored data is: {int(work_time_data.hours):02.0f} : {int(work_time_data.minutes):02.0f}
-                                                : {int(work_time_data.seconds):02.0f} (hh:mm:ss).
+                                                Stored data is: {int(work_time_data.hours):02.0f}:{int(work_time_data.minutes):02.0f}:{int(work_time_data.seconds):02.0f} (hh:mm:ss).
                                                 \nIf 'No', it will be overriden.""")
 
         if continue_existing_worktime_data == "yes":
