@@ -28,22 +28,21 @@ if __name__ == "__main__":
                                                             month_filter=month,
                                                             day_filter=day)
 
+        # maps current values to field names
         work_time_data = WorkTimeTuple(**fetched_data)
-        # grab hours, minutes and seconds from data tuple
-        stored_hours, stored_minutes, stored_seconds = work_time_data.hours, work_time_data.minutes, work_time_data.seconds
 
         continue_existing_worktime_data = messagebox.askquestion(title="Continue existing data",
                                                                  message=f"""Already stored data for today.
                                                 \nDo you want to continue existing data?
-                                                Stored data is: {int(stored_hours):02.0f} : {int(stored_minutes):02.0f}
-                                                : {int(stored_seconds):02.0f} (hh:mm:ss).
+                                                Stored data is: {int(work_time_data.hours):02.0f} : {int(work_time_data.minutes):02.0f}
+                                                : {int(work_time_data.seconds):02.0f} (hh:mm:ss).
                                                 \nIf 'No', it will be overriden.""")
 
         if continue_existing_worktime_data == "yes":
 
-            clock.set_hours_to(hours=int(stored_hours))
-            clock.set_minutes_to(minutes=int(stored_minutes))
-            clock.set_seconds_to(seconds=int(stored_seconds))
+            clock.set_hours_to(hours=int(work_time_data.hours))
+            clock.set_minutes_to(minutes=int(work_time_data.minutes))
+            clock.set_seconds_to(seconds=int(work_time_data.seconds))
 
     gui = GraphicalUserInterface(work_time_clock=clock,
                                  database=worktime_database)
