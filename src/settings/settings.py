@@ -13,6 +13,7 @@ DATABASE_NAME: str = rf"{filepath}"
 TABLE_NAME: str = "work_time_table"
 EXPORT_HEADLINE: str = "day;month;year;hours;minutes;seconds\n"
 DATABASE_INFORMATION_FIELDS: list[str] = ["year", "month", "day", "hours", "minutes", "seconds", "description"]
+
 # GUI-Styling
 FONT_TUPLE: tuple[str, int, str] = ('calibri', 25, 'bold')
 
