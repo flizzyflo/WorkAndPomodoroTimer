@@ -2,8 +2,10 @@
 import datetime
 import os
 import sqlite3 as sl
+from collections import namedtuple
 
-from src.settings.settings import EXPORT_HEADLINE
+from src.database.WorkTimeTuple import WorkTimeTuple
+from src.settings.settings import EXPORT_HEADLINE, DATABASE_INFORMATION_FIELDS
 
 
 class DatabaseManager:
@@ -22,7 +24,7 @@ class DatabaseManager:
         """Returns True if already a database entry for todays date exists."""
 
         year, month, day = str(datetime.date.today()).split("-")
-        entry_exists = len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day)) > 0
+        entry_exists = len(database_object.fetch_single_entry(year_filter=year, month_filter=month, day_filter=day).keys()) > 0
 
         return entry_exists
 
@@ -92,7 +94,8 @@ class DatabaseManager:
                         year KEY varchar,
                         hours varchar,
                         minutes varchar,
-                        seconds varchar)
+                        seconds varchar,
+                        description text)
                         """)
 
     def connect_to_database(self, database_name: str) -> sl.Connection:
@@ -104,16 +107,21 @@ class DatabaseManager:
         connection_to_database = sl.connect(database_name)
         return connection_to_database
 
-    def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> list[tuple[str]]:
+    def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> dict[str, int|str]:
         
         """Gets a single entry from the database according to the input values given."""
         
-        return self.connection.execute(f"""SELECT * 
+        raw_fetch = self.connection.execute(f"""SELECT * 
                                             FROM {self.table_name} 
                                             WHERE year == {year_filter}
                                             AND month == {month_filter} 
                                             AND day == {day_filter}
-                                            """).fetchall()
+                                            """).fetchall()[0]
+
+        # maps values to field names and turns them into a dictionary
+        field_value_dictionary = dict(zip(DATABASE_INFORMATION_FIELDS, raw_fetch))
+
+        return field_value_dictionary
 
     def fetch_all_database_entries(self, year_filter: int = None, month_filter: int = None) -> list[tuple[str]]:
         
