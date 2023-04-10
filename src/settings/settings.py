@@ -1,18 +1,19 @@
 from enum import Enum
 
+# General information
 PROGRAMM_VERSION: str = "1.8"
 PROGRAMM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
 
-### Database constants
+# Database constants
 with open(file=r"/Applications/ProgrammingFiles/Python/Published/WorkTimer/src/database/database_filepath.txt", mode="r") as db_filepath:
     filepath = db_filepath.read()
 DATABASE_NAME: str = rf"{filepath}"
 TABLE_NAME: str = "work_time_table"
 EXPORT_HEADLINE: str = "day;month;year;hours;minutes;seconds\n"
-
-### STYLING
+DATABASE_INFORMATION_FIELDS: list[str] = ["year", "month", "day", "hours", "minutes", "seconds", "description"]
+# GUI-Styling
 FONT_TUPLE: tuple[str, int, str] = ('calibri', 25, 'bold')
 
 TITLE_BACKGROUND_COLOR_FROZEN: str = "grey"
@@ -31,8 +32,8 @@ LABEL_STYLE_ACTIVE: dict[str, any] = {"background": TITLE_BACKGROUND_COLOR_ACTIV
                                       "foreground": TITLE_FONT_COLOR,
                                       "font": ('calibri', 30, 'bold')}
 
-### Window Size settings
-FRAMESIZE: str = "500x500"
+# Window Size settings
+FRAME_SIZE: str = "500x500"
 MIN_SIZE: tuple[int, int] = (500, 500)
 MAX_SIZE: tuple[int, int] = (500, 500)
 
