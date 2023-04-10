@@ -14,9 +14,9 @@ class DatabaseManager:
         
         self.table_name = table_name
         self.database_name = database_name
-        self.connection = self.connect_to_database(self.database_name)
+        self.connection = self.connect_to_database(database=self.database_name)
         self.cursor = self.connection.cursor()
-        self.create_table(table_name)
+        self.create_table(db_table_name=table_name)
 
     @staticmethod
     def entry_already_exists_in(*, database: 'DatabaseManager') -> bool:
@@ -51,7 +51,7 @@ class DatabaseManager:
         """Updates an entry given within the database entry. Keys are the year, month and day."""
 
         if not self.connection:
-            self.connection = self.connect_to_database(self.database_name)
+            self.connection = self.connect_to_database(database=self.database_name)
     
         hours, minutes, seconds = duration.split(":")
 
@@ -70,7 +70,7 @@ class DatabaseManager:
         """
         
         if not self.connection:
-            self.connection = self.connect_to_database(self.database_name)
+            self.connection = self.connect_to_database(database=self.database_name)
 
         hours, minutes, seconds = duration.split(":")
         
@@ -98,13 +98,13 @@ class DatabaseManager:
                         description text)
                         """)
 
-    def connect_to_database(self, database_name: str) -> sl.Connection:
+    def connect_to_database(self, *, database: str) -> sl.Connection:
         
         """
         Connects to the database to allow changing the data. Returns the connection object.
         """
 
-        connection_to_database = sl.connect(database_name)
+        connection_to_database = sl.connect(database)
         return connection_to_database
 
     def fetch_single_entry(self, year_filter: int, month_filter: int, day_filter: int) -> dict[str, int | str]:
