@@ -9,16 +9,16 @@ class PomodoroClock(Clock):
         self.break_time_short: int = break_time_short
         self.break_time_long: int = break_time_long
         self.next_break_time: int = 0
-        self.pomodoro_is_active: bool = False
+        self.is_active: bool = False
 
     def __repr__(self) -> str:
         return f"{self.get_minutes():02.0f}:{self.get_seconds():02.0f}"
 
     def pomodoro_is_active(self) -> bool:
-        return self.pomodoro_is_active
+        return self.is_active
 
     def set_pomodoro_active_to(self, *, active: bool) -> None:
-        self.pomodoro_is_active = active
+        self.is_active = active
     
     def increase_break_counter_by(self, *, increase: int) -> None:
         self.break_count += increase
