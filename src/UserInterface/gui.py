@@ -69,7 +69,7 @@ class GraphicalUserInterface(Tk):
 
         self.database_menu.add_separator()
         self.database_menu.add_command(label="Quit Work-Time-Tracker",
-                                       command=lambda: quit())
+                                       command=lambda: self.destroy())
 
         self.menubar.add_cascade(label="Database- & Program Management",
                                  menu=self.database_menu)
@@ -193,6 +193,20 @@ class GraphicalUserInterface(Tk):
         else:
             self.deactivate_pomodoro(minutes=PomodoroTimes.POMODORO_MINUTES.value,
                                      seconds=PomodoroTimes.POMODORO_SECONDS.value)
+
+    def destroy(self) -> None:
+
+        """
+        Closes the application when 'x' button is clicked. Stores the current last time into the database.
+        :return: None
+        """
+
+        # TODO Add question for entering description into database and add to database methods as well
+
+        work_time = str(self.work_time_clock)
+        self.database.maintain_database_entry(date=datetime.date.today(), work_time_duration=work_time)
+
+        super().destroy()
 
     def deactivate_pomodoro(self, minutes: int, seconds: int) -> None:
         """Deactivates the pomodoro GUI. Called via settings in menubar"""
@@ -336,7 +350,8 @@ class GraphicalUserInterface(Tk):
         
         work_time = str(self.work_time_clock)
         self.worked_time_label = Label(master=self.work_time_frame,
-                                       text=work_time, **LABEL_STYLE_FROZEN)
+                                       text=work_time,
+                                       **LABEL_STYLE_FROZEN)
         self.worked_time_label.pack(fill=BOTH,
                                     expand=1)
         self.work_time_headline_label.config(bg="grey")
