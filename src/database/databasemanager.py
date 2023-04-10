@@ -19,7 +19,7 @@ class DatabaseManager:
         self.create_table(table_name)
 
     @staticmethod
-    def entry_already_exist_in(database: 'DatabaseManager') -> bool:
+    def entry_already_exists_in(*, database: 'DatabaseManager') -> bool:
 
         """Returns True if already a database entry for todays date exists."""
 

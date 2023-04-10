@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     continue_existing_worktime_data: str = "no"
 
-    if DatabaseManager.entry_already_exist_in(database=worktime_database):
+    if DatabaseManager.entry_already_exists_in(database=worktime_database):
 
         # grab date as db key
         current_date: str = str(datetime.date.today())

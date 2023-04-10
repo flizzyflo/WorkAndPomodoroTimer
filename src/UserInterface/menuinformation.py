@@ -1,6 +1,8 @@
 from random import randint
 from tkinter import messagebox
 
+from src.clocks.pomodoroclock import PomodoroClock
+
 
 class MenuInformation:
 
@@ -14,7 +16,7 @@ class MenuInformation:
     @staticmethod
     def show_version_information(current_version_number: str) -> None:
         messagebox.showinfo("Changelog & Version information", 
-        f"""-Current Version: {current_version_number}: Massive code refactoring, implemented hour-/minutewise 
+        f"""-Current Version: {current_version_number}: Massive code refactoring, implemented hour-/minute 
         boundaries, improved counting logic, added possibility to continue existing worktime data.
         \n-Version 1.7: Improved class structure of timer and pomodoro class.
         \n-Version 1.6: Code Refactoring. Implemented a database to collect working time.
@@ -33,19 +35,19 @@ class MenuInformation:
         \n-Version 1.0: Initial creation of the whole application.""")
 
     @staticmethod
-    def returnRandomBreakMessage(pomodoroObject: object):
+    def return_random_break_message(pomodoro_object: PomodoroClock):
 
-        messages = [f"You should take a break. Your break should last {pomodoroObject.getBreakTime()} "
+        messages = [f"You should take a break. Your break should last {pomodoro_object.get_next_break_time()}"
                     f"minutes. After that, you will be even more productive, I promise!",
-                    f"Nothing moves us forward on our journey better than a break. "
-                    f"Enjoy your {pomodoroObject.getBreakTime()} minutes!",
-                    f"Calmness attracts life, restlessness scares it away. "
-                    f"Be calm for at least {pomodoroObject.getBreakTime()} minutes.",
-                    f"We have far too little leisure: time when nothing is going on. "
-                    f"This is the time when the Einsteins, the creative researchers, make their discoveries. "
-                    f"The business and the routine are uninteresting and counterproductive. "
-                    f"Take a break for {pomodoroObject.getBreakTime()} minutes.",
-                    f"What happens without rests does not last. Rest for {pomodoroObject.getBreakTime()} minutes.",
+                    f"Nothing moves us forward on our journey better than a break."
+                    f"Enjoy your {pomodoro_object.get_next_break_time()} minutes!",
+                    f"Calmness attracts life, restlessness scares it away."
+                    f"Be calm for at least {pomodoro_object.get_next_break_time()} minutes.",
+                    f"We have far too little leisure: time when nothing is going on."
+                    f"This is the time when the Einsteins, the creative researchers, make their discoveries."
+                    f"The business and the routine are uninteresting and counterproductive."
+                    f"Take a break for {pomodoro_object.get_next_break_time()} minutes.",
+                    f"What happens without rests does not last. Rest for {pomodoro_object.get_next_break_time()} minutes.",
                     ]
 
         return messages[randint(0, len(messages) - 1)]

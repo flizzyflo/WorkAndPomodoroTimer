@@ -255,7 +255,7 @@ class GraphicalUserInterface(Tk):
         """Brings up a pop-up window informing a user about the necessity of a break"""
 
         messagebox.showwarning(title=f"Overwhelming! You are so hardworking!",
-                               message=f"{MenuInformation.returnRandomBreakMessage(self.pomodoro_object)}")
+                               message=f"{MenuInformation.return_random_break_message(self.pomodoro_object)}")
 
     def reset_work_timer(self) -> None:
         """Stops counting of the work time counter and sets it back to its inital state."""
