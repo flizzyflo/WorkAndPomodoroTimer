@@ -197,7 +197,8 @@ class GraphicalUserInterface(Tk):
     def destroy(self) -> None:
 
         """
-        Closes the application when 'x' button is clicked. Stores the current last time into the database.
+        Closes the application when 'x' button is clicked. Stores the current last time into the database, even
+        when time was not stopped.
         :return: None
         """
 

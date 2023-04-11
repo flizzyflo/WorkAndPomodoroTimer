@@ -112,8 +112,11 @@ class DatabaseManager:
                                             WHERE year == {year_filter}
                                             AND month == {month_filter} 
                                             AND day == {day_filter}
-                                            """).fetchall()[0]
+                                            """).fetchall()
 
+        if len(raw_fetch) == 0:
+            return dict()
+        raw_fetch = raw_fetch[0]
         # maps values to field names and turns them into a dictionary
         field_value_dictionary = dict(zip(DATABASE_INFORMATION_FIELDS, raw_fetch))
 
