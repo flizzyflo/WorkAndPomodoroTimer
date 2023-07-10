@@ -6,14 +6,6 @@ PROGRAMM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
 
-# Database constants
-with open(file=r"/Applications/ProgrammingFiles/Python/Published/WorkTimer/src/database/database_filepath.txt", mode="r") as db_filepath:
-    filepath = db_filepath.read()
-DATABASE_NAME: str = rf"{filepath}"
-TABLE_NAME: str = "work_time_table"
-EXPORT_HEADLINE: str = "day;month;year;hours;minutes;seconds\n"
-DATABASE_INFORMATION_FIELDS: list[str] = ["year", "month", "day", "hours", "minutes", "seconds", "description"]
-
 # GUI-Styling
 FONT_TUPLE: tuple[str, int, str] = ('calibri', 25, 'bold')
 
@@ -62,5 +54,7 @@ class WorkTimeBarriers(Enum):
 
     NORMAL_DAILY_WORK_TIME_HOURS: int = 7
     NORMAL_DAILY_WORK_TIME_MINUTES: int = 48
+    NORMAL_DAILY_WORK_TIME_SECONDS: int = 48
     MAX_DAILY_WORK_TIME_HOURS: int = 10
     MAX_DAILY_WORK_TIME_MINUTES: int = 0
+    MAX_DAILY_WORK_TIME_SECONDS: int = 0
