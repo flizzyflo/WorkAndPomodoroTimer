@@ -1,11 +1,11 @@
 
 import tkinter
-from tkinter import Tk, BOTH, DISABLED, NORMAL, X, Button, Label, LabelFrame
+from tkinter import Tk, BOTH, DISABLED, NORMAL, Button, Label, LabelFrame
 from typing import Literal
 
 from src.clock.worktimeclock import WorkTimeClock
-from src.database_filepath.database_reader import DatabaseReader
-from src.database_filepath.database_writer import DatabaseWriter
+from src.database.database_reader import DatabaseReader
+from src.database.database_writer import DatabaseWriter
 from src.settings.settings import PROGRAMM_TITLE, PROGRAMM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
     LABEL_STYLE_FROZEN, WorkTimeBarriers
 
@@ -149,7 +149,7 @@ class GraphicalUserInterface(Tk):
         self.work_time_headline_label.config(bg=new_color)
         self.work_time_frame.config(bg=new_color)
 
-    def change_worktime_clock_colorization(self) -> None:
+    def change_worktimer_background_color(self) -> None:
 
         """
         Updates the background color of the work time labels depending on the current working time
@@ -172,8 +172,9 @@ class GraphicalUserInterface(Tk):
         the actual amount of time already worked
         """
 
-        self.change_worktime_clock_colorization()  # manage the gui colorization depending on the current worktime and the overtime settings
+        self.change_worktimer_background_color()  # manage the gui colorization depending on the current worktime and the overtime settings
         self.work_time_clock.count_time()  # clock method to count the time
+
         self.__manage_start_button()  # manages the start button text and colorization
         self.worked_time_label.config(text=self.work_time_clock.__repr__())  # inserts the current work time into the label
         self.worked_time_label.after(1000, lambda: self.start_working())  # update loop for the text label
