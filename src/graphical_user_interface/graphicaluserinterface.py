@@ -96,6 +96,7 @@ class GraphicalUserInterface(Tk):
         work_time = str(self.work_time_clock)
 
         self.database_facade.insert_data_into_database(worktime=work_time)
+        self.database_facade.tt()
         super().destroy()
 
     def reset_work_timer(self) -> None:

@@ -4,6 +4,7 @@ from src.database.database_writer import DatabaseWriter
 from src.database.database_reader import DatabaseReader
 from src.database.database_connector import DatabaseConnector
 
+# TODO add comments / docstring
 
 class DatabaseFacade:
 
@@ -20,5 +21,8 @@ class DatabaseFacade:
 
     def export_database_entries(self, *, filepath: str | Path) -> None:
         return self.database_reader._export_database_entries(filepath=filepath)
+
+    def tt(self):
+        print(self.database_reader._read_database_entries())
 
     # TODO add menubar to select a path and start the export via button.
