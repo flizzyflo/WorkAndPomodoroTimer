@@ -1,6 +1,5 @@
 import sqlite3
 from pathlib import Path
-import csv
 from src.database.database_writer import DatabaseWriter
 from src.database.database_reader import DatabaseReader
 from src.database.database_connector import DatabaseConnector
