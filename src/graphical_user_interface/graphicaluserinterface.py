@@ -4,8 +4,7 @@ from tkinter import Tk, BOTH, DISABLED, NORMAL, Button, Label, LabelFrame
 from typing import Literal
 
 from src.clock.worktimeclock import WorkTimeClock
-from src.database.database_reader import DatabaseReader
-from src.database.database_writer import DatabaseWriter
+from src.database.database_facade import DatabaseFacade
 from src.settings.settings import PROGRAMM_TITLE, PROGRAMM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
     LABEL_STYLE_FROZEN, WorkTimeBarriers
 
@@ -14,16 +13,14 @@ class GraphicalUserInterface(Tk):
 
     def __init__(self,
                  work_time_clock: WorkTimeClock,
-                 database_reader: DatabaseReader = None,
-                 database_writer: DatabaseWriter = None) -> None:
+                 database_facade: DatabaseFacade = None) -> None:
         
         super().__init__()
         
         self.title(PROGRAMM_TITLE)
         self.attributes("-topmost", True)
 
-        self.database_reader = database_reader
-        self.database_writer = database_writer
+        self.database_facade: DatabaseFacade = database_facade
         self.work_time_clock: WorkTimeClock = work_time_clock
         self.current_program_version: str = PROGRAMM_VERSION
         self.stopped = False
@@ -98,9 +95,7 @@ class GraphicalUserInterface(Tk):
 
         work_time = str(self.work_time_clock)
 
-        # TODO insert new database writer methods
-        # self.database_writer.maintain_database_entry(date=datetime.date.today(), work_time_duration=work_time)
-
+        self.database_facade.insert_data_into_database(worktime=work_time)
         super().destroy()
 
     def reset_work_timer(self) -> None:
