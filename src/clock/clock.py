@@ -39,6 +39,12 @@ class Clock:
     def set_seconds_to(self, seconds: int = 0) -> None:
         self.seconds = seconds
 
+    def set_total_time(self, time: str) -> None:
+        hours, minutes, seconds = time.split(":")
+        self.set_hours_to(int(hours))
+        self.set_minutes_to(int(minutes))
+        self.set_seconds_to(int(seconds))
+
     def increase_seconds_by(self, seconds: int = 1) -> None:
         self.seconds += seconds
 
