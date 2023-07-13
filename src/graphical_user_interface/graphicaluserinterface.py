@@ -1,6 +1,6 @@
 
 import tkinter
-from tkinter import Tk, BOTH, DISABLED, NORMAL, Button, Label, LabelFrame
+from tkinter import Tk, BOTH, DISABLED, NORMAL, Button, Label, LabelFrame, messagebox
 from typing import Literal
 
 from src.clock.worktimeclock import WorkTimeClock
@@ -32,7 +32,19 @@ class GraphicalUserInterface(Tk):
         self.work_time_headline_label: tkinter.Label = None
         self.worked_time_label: tkinter.Label = None
 
+        self.manage_existing_value()
         self.initialize_buttons()
+
+    def manage_existing_value(self) -> None:
+        if self.database_facade.entry_for_current_date_already_exists(): # value for today exists, want to continue or override?
+            worktime_for_specific_date: str = self.database_facade.grab_worktime_for()
+            answer: str = messagebox.askquestion(title="Already worked today...",
+                                                 message=f"You already saved worktime information for '{self.database_facade.get_current_date()}'. Do you want to continue existing data? Stored worktime for today is '{worktime_for_specific_date}'.\nAttention: If you select 'No', information will be overridden and lost forever!")
+
+            if answer == "yes":
+                self.work_time_clock.set_total_time(time=worktime_for_specific_date)
+
+        return
 
     def initialize_buttons(self) -> None:
 
@@ -96,7 +108,6 @@ class GraphicalUserInterface(Tk):
         work_time = str(self.work_time_clock)
 
         self.database_facade.insert_data_into_database(worktime=work_time)
-        self.database_facade.tt()
         super().destroy()
 
     def reset_work_timer(self) -> None:
