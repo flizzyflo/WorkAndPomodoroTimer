@@ -5,10 +5,22 @@ from datetime import datetime
 
 class DatabaseWriter:
 
+    """
+    Class to write information into the database. Can either insert new information into the database or
+    update existing information within the database.
+    """
+
     def __init__(self, *, database_connection: sqlite3.Connection) -> None:
         self.database_connection: sqlite3.Connection = database_connection
         self.cursor: sqlite3.Cursor = self.database_connection.cursor()
         self.current_date: str = self.__reformat_date()
+
+    def get_current_date(self) -> str:
+        """
+        Returns the instancevariable which stores the current date.
+        :return: current date as string in format dd-mm-yyyy
+        """
+        return self.current_date
 
     def insert_entry_to_database(self, *, worktime: str) -> None:
 
@@ -61,8 +73,6 @@ class DatabaseWriter:
         except sqlite3.OperationalError as oe:
             print(f"Following error occurred while fetching data: {oe}")
             return False
-
-        print(entry)
 
         return entry is not None
 
