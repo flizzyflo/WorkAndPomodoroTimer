@@ -16,7 +16,7 @@ class GraphicalUserInterface(Tk):
                  database_facade: DatabaseFacade = None) -> None:
         
         super().__init__()
-        
+
         self.title(PROGRAMM_TITLE)
         self.attributes("-topmost", True)
 
@@ -36,15 +36,36 @@ class GraphicalUserInterface(Tk):
         self.initialize_buttons()
 
     def manage_existing_value(self) -> None:
+
+        """
+        Method checks whether a value is already stored for todays date and manages the value.
+        Displays a messsagebox and depending on the answer, handles the existing value. If no value exists, nothing
+        happens
+        :return: None
+        """
+
         if self.database_facade.entry_for_current_date_already_exists(): # value for today exists, want to continue or override?
+
             worktime_for_specific_date: str = self.database_facade.grab_worktime_for()
-            answer: str = messagebox.askquestion(title="Already worked today...",
-                                                 message=f"You already saved worktime information for '{self.database_facade.get_current_date()}'. Do you want to continue existing data? Stored worktime for today is '{worktime_for_specific_date}'.\nAttention: If you select 'No', information will be overridden and lost forever!")
+            answer: str = self.overwrite_value_for(date=worktime_for_specific_date)
 
             if answer == "yes":
                 self.work_time_clock.set_total_time(time=worktime_for_specific_date)
 
         return
+
+    def overwrite_value_for(self, *, date: str) -> str:
+
+        """
+        Method manages the pop-up window and asks whether one will continue existing worktime or
+        overwrite it with new worktime for specific date passed in.
+        :param date: date to be checked for.
+        :return: answer as string, either "Yes" or "No"
+        """
+
+        answer: str = messagebox.askquestion(title="Already worked today...",
+                                             message=f"You already saved worktime information for '{self.database_facade.get_current_date()}'. Do you want to continue existing data? Stored worktime for today is '{date}'.\nAttention: If you select 'No', information will be overridden and lost forever!")
+        return answer
 
     def initialize_buttons(self) -> None:
 
@@ -102,8 +123,6 @@ class GraphicalUserInterface(Tk):
         when time was not stopped.
         :return: None
         """
-
-        # TODO Add question for entering description into database and add to database methods as well
 
         work_time = str(self.work_time_clock)
 
@@ -214,10 +233,6 @@ class GraphicalUserInterface(Tk):
         """
         self.stopped = True
         self.__recolor_stopped_gui()
-
-        # TODO insert new database writer class methods.
-        # self.database_writer.maintain_database_entry(date=datetime.date.today(), work_time_duration=work_time)
-
         self.__manage_start_button()
 
     def __recolor_stopped_gui(self):
