@@ -5,7 +5,7 @@ from typing import Literal
 
 from src.clock.worktimeclock import WorkTimeClock
 from src.database.database_facade import DatabaseFacade
-from src.settings.settings import PROGRAMM_TITLE, PROGRAMM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
+from src.settings.settings import PROGRAM_TITLE, PROGRAM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
     LABEL_STYLE_FROZEN, WorkTimeBarriers
 
 
@@ -17,12 +17,12 @@ class GraphicalUserInterface(Tk):
         
         super().__init__()
 
-        self.title(PROGRAMM_TITLE)
+        self.title(PROGRAM_TITLE)
         self.attributes("-topmost", True)
 
         self.database_facade: DatabaseFacade = database_facade
         self.work_time_clock: WorkTimeClock = work_time_clock
-        self.current_program_version: str = PROGRAMM_VERSION
+        self.current_program_version: str = PROGRAM_VERSION
         self.stopped = False
 
         self.button_frame: tkinter.LabelFrame = None
@@ -44,17 +44,18 @@ class GraphicalUserInterface(Tk):
         :return: None
         """
 
+        if self.database_facade is None:
+            return
+
         if self.database_facade.entry_for_current_date_already_exists(): # value for today exists, want to continue or override?
 
             worktime_for_specific_date: str = self.database_facade.grab_worktime_for()
-            answer: str = self.overwrite_value_for(date=worktime_for_specific_date)
+            answer: str = self.ask_for_overwrite(date=worktime_for_specific_date)
 
             if answer == "yes":
                 self.work_time_clock.set_total_time(time=worktime_for_specific_date)
 
-        return
-
-    def overwrite_value_for(self, *, date: str) -> str:
+    def ask_for_overwrite(self, *, date: str) -> str:
 
         """
         Method manages the pop-up window and asks whether one will continue existing worktime or
@@ -125,8 +126,9 @@ class GraphicalUserInterface(Tk):
         """
 
         work_time = str(self.work_time_clock)
+        if self.database_facade is not None:
+            self.database_facade.insert_data_into_database(worktime=work_time)
 
-        self.database_facade.insert_data_into_database(worktime=work_time)
         super().destroy()
 
     def reset_work_timer(self) -> None:
