@@ -1,6 +1,9 @@
+import os.path
 import re
 import sqlite3
 from pathlib import Path
+from typing import Tuple
+
 from src.database.database_writer import DatabaseWriter
 from src.database.database_reader import DatabaseReader
 from src.database.database_connector import DatabaseConnector
@@ -12,8 +15,9 @@ class DatabaseFacade:
     Facadeclass which has composition to all three different database working classes. This class is used to
     control the whole database behaviour from a single point of control.
     """
-    def __init__(self, *, database_path: str | Path) -> None:
-        self.database_connection: sqlite3.Connection = DatabaseConnector.get_database_connection(database_path=database_path)
+    def __init__(self) -> None:
+        self.database_path = Path(os.path.join(os.path.dirname(__file__), "work_time.db"))
+        self.database_connection: sqlite3.Connection = DatabaseConnector.get_database_connection(database_path=self.database_path)
         self.database_writer: DatabaseWriter = DatabaseWriter(database_connection=self.database_connection)
         self.database_reader: DatabaseReader = DatabaseReader(database_connection=self.database_connection)
         self.current_date: str = self.database_writer.get_current_date()
@@ -33,7 +37,7 @@ class DatabaseFacade:
 
         self.database_writer.insert_entry_to_database(worktime=worktime)
 
-    def grab_worktime_for(self, date_to_grab_for: str = None) -> str:
+    def grab_worktime_for(self, date_to_grab_for: str = None) -> Tuple[str]:
 
         regex_date_pattern: str = r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(20[2-9][0-9])$"
 
@@ -65,6 +69,6 @@ class DatabaseFacade:
         :return: None
         """
 
-        return self.database_reader._export_database_entries(path_to_store_csv_file=path_to_store_csv_file,
-                                                             filename=filename)
+        self.database_reader._export_database_entries(path_to_store_csv_file=path_to_store_csv_file,
+                                                      filename=filename)
 
