@@ -1,8 +1,8 @@
 from enum import Enum
 
 # General information
-PROGRAMM_VERSION: str = "1.8"
-PROGRAMM_TITLE: str = "Work-time tracking"
+PROGRAM_VERSION: str = "1.8"
+PROGRAM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
 
@@ -32,18 +32,6 @@ MAX_SIZE: tuple[int, int] = (500, 500)
 
 HOUR: int = 60
 MINUTE: int = 60
-
-
-class PomodoroTimes(Enum):
-
-    """
-    Pomodoro Break settings and Duration settings
-    """
-
-    LONG_BREAK: int = 20
-    SHORT_BREAK: int = 5
-    POMODORO_MINUTES: int = 24
-    POMODORO_SECONDS: int = 60
 
 
 class WorkTimeBarriers(Enum):
