@@ -3,6 +3,7 @@ import csv
 from pathlib import Path
 import os
 import re
+from typing import Tuple, List
 
 
 class DatabaseReader:
@@ -16,7 +17,7 @@ class DatabaseReader:
         self.database_connection: sqlite3.Connection = database_connection
         self.cursor: sqlite3.Cursor = self.database_connection.cursor()
 
-    def _grab_worktime_for(self, *, date_to_grab_for: str) -> tuple[str]:
+    def _grab_worktime_for(self, *, date_to_grab_for: str) -> Tuple[str]:
 
         """
         Grabs the worktime stored for the specific date passed in as argument and returns it as a string.
@@ -28,8 +29,7 @@ class DatabaseReader:
                                        FROM worktime_documentation 
                                        WHERE date = '{date_to_grab_for}'""").fetchone()[0] # to return just the tuple without the surrounding list
 
-
-    def _read_database_entries(self) -> list:
+    def _read_database_entries(self) -> List[str]:
 
         """Fetches all entries from the database table where the worktime information are stored. Returns a
         list of tuples containing the information about date and worktime.
