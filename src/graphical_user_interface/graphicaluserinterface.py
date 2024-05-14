@@ -6,7 +6,8 @@ from typing import Literal
 from src.clock.worktimeclock import WorkTimeClock
 from src.database.database_facade import DatabaseFacade
 from src.settings.settings import PROGRAM_TITLE, PROGRAM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
-    LABEL_STYLE_FROZEN, WorkTimeBarriers
+    LABEL_STYLE_FROZEN
+from src.settings.work_time_barriers import WorkTimeBarriers
 
 
 class GraphicalUserInterface(Tk):
@@ -64,8 +65,9 @@ class GraphicalUserInterface(Tk):
         :return: answer as string, either "Yes" or "No"
         """
 
-        answer: str = messagebox.askquestion(title="Already worked today...",
-                                             message=f"You already saved worktime information for '{self.database_facade.get_current_date()}'. Do you want to continue existing data? Stored worktime for today is '{date}'.\nAttention: If you select 'No', information will be overridden and lost forever!")
+        answer: str = messagebox.askquestion(title="Keep stored date and continue?",
+                                             message=f"Do you want to continue existing data?",
+                                             detail=f"Stored worktime for {self.database_facade.get_current_date()} is '{date}'.")
         return answer
 
     def initialize_buttons(self) -> None:
