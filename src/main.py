@@ -1,5 +1,4 @@
 
-from pathlib import Path
 from src.clock.worktimeclock import WorkTimeClock
 from src.graphical_user_interface.graphicaluserinterface import GraphicalUserInterface
 from src.database.database_facade import DatabaseFacade
