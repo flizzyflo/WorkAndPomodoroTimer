@@ -6,7 +6,6 @@ from pathlib import Path
 
 
 def read_from_json(filename: str) -> dict[str, int]:
-
     settings_file_path: Path = Path(os.path.join(os.path.dirname(__file__), filename))
     with open(settings_file_path, "r") as file_to_read:
         json_content = json.load(file_to_read)
@@ -19,7 +18,6 @@ def write_to_json(filename: str) -> None:
 
 
 class WorkTimeBarriers(Enum):
-
     """
     work time barriers
     """
