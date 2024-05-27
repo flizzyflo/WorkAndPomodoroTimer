@@ -1,13 +1,12 @@
 from enum import Enum
 
 # General information
-PROGRAM_VERSION: str = "1.8"
+PROGRAM_VERSION: str = "1.9"
 PROGRAM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
-
 # GUI-Styling
-FONT_TUPLE: tuple[str, int, str] = ('calibri', 25, 'bold')
+FONT_TUPLE: tuple[str, int, str] = ('arial', 35, 'bold')
 
 TITLE_BACKGROUND_COLOR_FROZEN: str = "grey"
 TITLE_BACKGROUND_COLOR_ACTIVE: str = "green"
