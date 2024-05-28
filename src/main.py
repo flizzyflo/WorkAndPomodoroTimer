@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     database_accessor = DatabaseFacade()
     clock = WorkTimeClock(initial_hours=0,
-                          initial_minutes=00,
+                          initial_minutes=0,
                           initial_seconds=0)
 
     gui = GraphicalUserInterface(work_time_clock=clock,
