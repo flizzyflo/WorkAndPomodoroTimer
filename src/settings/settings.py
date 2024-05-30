@@ -32,16 +32,3 @@ MAX_SIZE: tuple[int, int] = (500, 500)
 HOUR: int = 60
 MINUTE: int = 60
 
-
-class WorkTimeBarriers(Enum):
-
-    """
-    work time barriers
-    """
-
-    NORMAL_DAILY_WORK_TIME_HOURS: int = 7
-    NORMAL_DAILY_WORK_TIME_MINUTES: int = 48
-    NORMAL_DAILY_WORK_TIME_SECONDS: int = 48
-    MAX_DAILY_WORK_TIME_HOURS: int = 10
-    MAX_DAILY_WORK_TIME_MINUTES: int = 0
-    MAX_DAILY_WORK_TIME_SECONDS: int = 0
