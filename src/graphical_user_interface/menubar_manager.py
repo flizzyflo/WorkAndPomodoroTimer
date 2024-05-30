@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from src.database.database_facade import DatabaseFacade
+from src.graphical_user_interface.settingsmenu import SettingsMenu
 
 
 class MenuBarManager(tk.Menu):
@@ -8,12 +9,13 @@ class MenuBarManager(tk.Menu):
     Base Menuclass to handle Menu and allow the user to
     use several functionalities.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.filemenu = tk.Menu(master=self)
         self.add_cascade(label="File", menu=self.filemenu)
         self.filemenu.add_command(label="Export file", command=lambda: self.export_database_information())
-        self.filemenu.add_command(label="Settings")
+        self.filemenu.add_command(label="Settings", command=lambda: SettingsMenu())
         self.filemenu.add_separator()
         self.filemenu.add_command(label="Quit", command=lambda: quit())
         self.db_facade: DatabaseFacade = None
