@@ -1,5 +1,7 @@
 
 import tkinter as tk
+from typing import Dict
+
 from ..settings.work_time_barriers import read_from_json, write_to_json
 
 
@@ -11,6 +13,7 @@ class SettingsMenu(tk.Tk):
     max_worktime_minutes: tk.Entry
     max_worktime_seconds: tk.Entry
     entry_frame: tk.Frame
+    work_time_settings: Dict[str, str]
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -19,35 +22,31 @@ class SettingsMenu(tk.Tk):
         self.initialize_entry_widgets()
 
         self.save_button = tk.Button(master=self, text="Save", command=lambda: quit())
-        self.save_button.pack()
+        self.save_button.pack(fill=tk.BOTH)
         self.quit_button = tk.Button(master=self, text="Quit", command=lambda: quit())
-        self.quit_button.pack()
-
-
+        self.quit_button.pack(fill=tk.BOTH)
 
     def initialize_entry_widgets(self) -> None:
-        r = read_from_json("work_times.json")
+
+        work_time_settings = read_from_json("work_times.json")
+        print(work_time_settings)
+        tk.Label(master=self.entry_frame, text="Usual daily hours: ").grid(column=0, row=0)
         self.normal_worktime_hours = tk.Entry(master=self.entry_frame)
-        self.normal_worktime_hours.insert(0, str(r["NORMAL_DAILY_WORK_TIME_HOURS"]))
-        self.normal_worktime_hours.pack()
+        self.normal_worktime_hours.insert(0, str(work_time_settings["NORMAL_DAILY_WORK_TIME_HOURS"]))
+        self.normal_worktime_hours.grid(column=1, row=0)
 
+        tk.Label(master=self.entry_frame, text="Usual daily minutes: ").grid(column=0, row=1)
         self.normal_worktime_minutes = tk.Entry(master=self.entry_frame)
-        self.normal_worktime_minutes.insert(0, str(r["NORMAL_DAILY_WORK_TIME_MINUTES"]))
-        self.normal_worktime_minutes.pack()
+        self.normal_worktime_minutes.insert(0, str(work_time_settings["NORMAL_DAILY_WORK_TIME_MINUTES"]))
+        self.normal_worktime_minutes.grid(column=1, row=1)
 
-        self.normal_worktime_seconds = tk.Entry(master=self.entry_frame)
-        self.normal_worktime_seconds.insert(0, str(r["NORMAL_DAILY_WORK_TIME_SECONDS"]))
-        self.normal_worktime_seconds.pack()
-
+        tk.Label(master=self.entry_frame, text="Max daily hours: ").grid(column=0, row=3)
         self.max_worktime_hours = tk.Entry(master=self.entry_frame)
-        self.max_worktime_hours.insert(0, str(r["MAX_DAILY_WORK_TIME_HOURS"]))
-        self.max_worktime_hours.pack()
+        self.max_worktime_hours.insert(0, str(work_time_settings["MAX_DAILY_WORK_TIME_HOURS"]))
+        self.max_worktime_hours.grid(column=1, row=3)
 
+        tk.Label(master=self.entry_frame, text="Max daily minutes: ").grid(column=0, row=4)
         self.max_worktime_minutes = tk.Entry(master=self.entry_frame)
-        self.normal_worktime_hours.insert(0, str(r["MAX_DAILY_WORK_TIME_MINUTES"]))
-        self.normal_worktime_hours.pack()
-
-        self.max_worktime_seconds = tk.Entry(master=self.entry_frame)
-        self.max_worktime_seconds.insert(0, str(r["MAX_DAILY_WORK_TIME_SECONDS"]))
-        self.max_worktime_seconds.pack()
+        self.max_worktime_minutes.insert(0, str(work_time_settings["MAX_DAILY_WORK_TIME_MINUTES"]))
+        self.max_worktime_minutes.grid(column=1, row=4)
 
