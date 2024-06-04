@@ -7,7 +7,7 @@ from src.clock.worktimeclock import WorkTimeClock
 from src.database.database_facade import DatabaseFacade
 from src.settings.settings import PROGRAM_TITLE, PROGRAM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
     LABEL_STYLE_FROZEN
-from src.settings.work_time_barriers import WorkTimeBarriers
+from src.settings.work_time_barriers import WorkTimeBarriers, read_from_json
 
 
 class GraphicalUserInterface(Tk):
@@ -33,6 +33,9 @@ class GraphicalUserInterface(Tk):
         self.work_time_headline_label: tkinter.Label = None
         self.worked_time_label: tkinter.Label = None
 
+        self.work_times = read_from_json("../settings/work_times.json")
+        self.max_border = int(self.work_times["MAX_DAILY_WORK_TIME_HOURS"]) * 60 + int(self.work_times["MAX_DAILY_WORK_TIME_MINUTES"])
+        self.normal_border = int(self.work_times["NORMAL_DAILY_WORK_TIME_HOURS"]) * 60 + int(self.work_times["NORMAL_DAILY_WORK_TIME_MINUTES"])
         self.manage_existing_value()
         self.initialize_buttons()
 
@@ -153,10 +156,13 @@ class GraphicalUserInterface(Tk):
 
         """Checks whether one is already doing overtime or not and returns either true or false"""
 
-        current_minutes_worked: int = int(self.work_time_clock.get_current_time())
-        current_overtime_barrier: int = int(f"""{WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_HOURS.value:02.0f}{WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_MINUTES.value:02.0f}{WorkTimeBarriers.NORMAL_DAILY_WORK_TIME_SECONDS.value:02.0f}""")
+        current_time = self.work_time_clock.get_current_time().split(":")
+        current_work_hours = int(current_time[0])
+        current_work_minutes = int(current_time[1])
 
-        return current_minutes_worked >= current_overtime_barrier
+        # add hours to minutes, for comparison
+        current_work_minutes += current_work_hours * 60
+        return self.max_border >= current_work_minutes >= self.normal_border
 
     def __is_above_maximum_worktime(self) -> bool:
 
@@ -164,10 +170,14 @@ class GraphicalUserInterface(Tk):
         Checks whether one is already working than max allowed worktime is and returns either true or false
         """
 
-        current_minutes_worked: int = int(self.work_time_clock.get_current_time())
-        current_maximum_worktime_barrier: int = int(f"""{WorkTimeBarriers.MAX_DAILY_WORK_TIME_HOURS.value:02.0f}{WorkTimeBarriers.MAX_DAILY_WORK_TIME_MINUTES.value:02.0f}{WorkTimeBarriers.MAX_DAILY_WORK_TIME_SECONDS.value:02.0f}""")
+        current_time = self.work_time_clock.get_current_time().split(":")
+        current_work_hours = int(current_time[0])
+        current_work_minutes = int(current_time[1])
 
-        return current_minutes_worked >= current_maximum_worktime_barrier
+        # add hours to minutes, for comparison
+        current_work_minutes += current_work_hours * 60
+
+        return current_work_minutes >= self.max_border
 
     def __change_worktimer_background_color(self, new_color: Literal['green', 'yellow', 'red', 'grey']):
 
@@ -188,8 +198,8 @@ class GraphicalUserInterface(Tk):
 
         if self.__is_above_maximum_worktime():
             self.__change_worktimer_background_color(new_color="red")
-        
-        elif self.__is_doing_overtime() and not self.__is_above_maximum_worktime():
+
+        elif self.__is_doing_overtime():
             self.__change_worktimer_background_color(new_color="yellow")
 
         else: # normal case, no overtime or max time
