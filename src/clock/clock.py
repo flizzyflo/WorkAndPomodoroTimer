@@ -19,7 +19,7 @@ class Clock:
         self.seconds -= clock_object.seconds
 
     def get_current_time(self) -> str:
-        return f"{self.get_hours():02.0f}{self.get_minutes():02.0f}{self.get_seconds():02.0f}"
+        return f"{self.get_hours():02.0f}:{self.get_minutes():02.0f}:{self.get_seconds():02.0f}"
 
     def get_hours(self) -> int:
         return self.hours
