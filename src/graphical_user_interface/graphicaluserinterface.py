@@ -7,7 +7,7 @@ from src.clock.worktimeclock import WorkTimeClock
 from src.database.database_facade import DatabaseFacade
 from src.settings.settings import PROGRAM_TITLE, PROGRAM_VERSION, FONT_TUPLE, BUTTON_STYLE, \
     LABEL_STYLE_FROZEN
-from src.settings.work_time_barriers import WorkTimeBarriers, read_from_json
+from src.settings.json_reader_writer import read_from_json
 
 
 class GraphicalUserInterface(Tk):
@@ -211,6 +211,9 @@ class GraphicalUserInterface(Tk):
         Wrapper-method to call several sub-methods. Updates the visualization of the work timer and presents
         the actual amount of time already worked
         """
+
+        # ensures to read and grab always newest settings. allows changes in settings on the fly without the need to restart the application
+        self.work_times = read_from_json("../settings/work_times.json")
 
         self.change_worktimer_background_color()  # manage the gui colorization depending on the current worktime and the overtime settings
         self.work_time_clock.count_time()  # clock method to count the time
