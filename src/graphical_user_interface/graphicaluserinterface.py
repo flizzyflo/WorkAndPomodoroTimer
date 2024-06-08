@@ -1,7 +1,7 @@
 
 import tkinter
 from tkinter import Tk, BOTH, DISABLED, NORMAL, Button, Label, LabelFrame, messagebox
-from typing import Literal
+from typing import Literal, Tuple
 
 from src.clock.worktimeclock import WorkTimeClock
 from src.database.database_facade import DatabaseFacade
