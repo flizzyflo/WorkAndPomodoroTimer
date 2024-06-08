@@ -17,7 +17,7 @@ class DatabaseReader:
         self.database_connection: sqlite3.Connection = database_connection
         self.cursor: sqlite3.Cursor = self.database_connection.cursor()
 
-    def _grab_worktime_for(self, *, date_to_grab_for: str) -> Tuple[str]:
+    def _grab_worktime_for(self, *, date_to_grab_for: str) -> str:
 
         """
         Grabs the worktime stored for the specific date passed in as argument and returns it as a string.
