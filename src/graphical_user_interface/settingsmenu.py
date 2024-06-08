@@ -2,6 +2,7 @@ import tkinter as tk
 from typing import Dict, List
 
 from ..settings.json_reader_writer import read_from_json, write_to_json
+from ..settings.settings import BUTTON_STYLE
 
 
 class SettingsMenu(tk.Tk):
@@ -28,9 +29,9 @@ class SettingsMenu(tk.Tk):
         self.initialize_button_widgets()
 
     def initialize_button_widgets(self) -> None:
-        self.save_button = tk.Button(master=self.button_frame, text="Save", command=lambda: self.save_settings())
+        self.save_button = tk.Button(master=self.button_frame, text="Save", command=lambda: self.save_settings(), **BUTTON_STYLE)
         self.save_button.pack(fill=tk.BOTH)
-        self.quit_button = tk.Button(master=self.button_frame, text="Quit", command=lambda: self.destroy())
+        self.quit_button = tk.Button(master=self.button_frame, text="Quit", command=lambda: self.destroy(), **BUTTON_STYLE)
         self.quit_button.pack(fill=tk.BOTH)
 
     def initialize_label_widgets(self) -> None:
