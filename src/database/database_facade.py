@@ -37,7 +37,7 @@ class DatabaseFacade:
 
         self.database_writer.insert_entry_to_database(worktime=worktime)
 
-    def grab_worktime_for(self, date_to_grab_for: str = None) -> Tuple[str]:
+    def grab_worktime_for(self, date_to_grab_for: str = None) -> str:
 
         regex_date_pattern: str = r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(20[2-9][0-9])$"
 
