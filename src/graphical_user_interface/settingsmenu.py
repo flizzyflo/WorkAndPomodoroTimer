@@ -24,6 +24,8 @@ class SettingsMenu(tk.Tk):
         self.button_frame = tk.Frame(master=self)
         self.button_frame.grid(column=0, row=1, columnspan=2)
         self.label_names: List[str] = ["Usual daily hours: ", "Usual daily minutes: ", "Max daily hours: ", "Max daily minutes: "]
+        self.save_button: tk.Button = None
+        self.quit_button: tk.Button = None
         self.initialize_label_widgets()
         self.initialize_entry_widgets()
         self.initialize_button_widgets()
