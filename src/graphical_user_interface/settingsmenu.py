@@ -2,7 +2,7 @@ import tkinter as tk
 from typing import Dict, List
 
 from ..settings.json_reader_writer import read_from_json, write_to_json
-from ..settings.settings import BUTTON_STYLE
+from ..settings.settings import BUTTON_STYLE, ENTRY_WIDTH, LABEL_WIDTH, PADY, PADX
 
 
 class SettingsMenu(tk.Tk):
@@ -12,32 +12,45 @@ class SettingsMenu(tk.Tk):
     max_worktime_hours: tk.Entry
     max_worktime_minutes: tk.Entry
     max_worktime_seconds: tk.Entry
+    button_frame: tk.Frame
+    label_frame: tk.Frame
     entry_frame: tk.Frame
+    save_button: tk.Button
+    quit_button: tk.Button
     work_time_settings: Dict[str, str]
+    label_names: List[str]
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.title("Work-Time Settings")
+        self.attributes("-topmost", True)
         self.label_frame = tk.Frame(master=self)
         self.label_frame.grid(column=0, row=0)
         self.entry_frame = tk.Frame(master=self)
-        self.entry_frame.grid(column=1, row=0, pady=10, padx=10)
+        self.entry_frame.grid(column=1, row=0, padx=PADX, pady=PADY)
         self.button_frame = tk.Frame(master=self)
-        self.button_frame.grid(column=0, row=1, columnspan=2)
-        self.label_names: List[str] = ["Usual daily hours: ", "Usual daily minutes: ", "Max daily hours: ", "Max daily minutes: "]
-        self.save_button: tk.Button = None
-        self.quit_button: tk.Button = None
-        self.normal_worktime_hours: tk.Entry = None
-        self.normal_worktime_minutes: tk.Entry = None
-        self.max_worktime_hours: tk.Entry = None
-        self.max_worktime_minutes: tk.Entry = None
+        self.button_frame.grid(column=0, row=1, columnspan=2, padx=PADX, pady=PADY)
+        self.label_names = ["Usual daily hours: ", "Usual daily minutes: ", "Max daily hours: ", "Max daily minutes: "]
+        self.save_button = None
+        self.quit_button = None
+        self.normal_worktime_hours = None
+        self.normal_worktime_minutes = None
+        self.max_worktime_hours = None
+        self.max_worktime_minutes = None
         self.initialize_label_widgets()
         self.initialize_entry_widgets()
         self.initialize_button_widgets()
 
     def initialize_button_widgets(self) -> None:
-        self.save_button = tk.Button(master=self.button_frame, text="Save", command=lambda: self.save_settings(), **BUTTON_STYLE)
+        self.save_button = tk.Button(master=self.button_frame,
+                                     text="Save",
+                                     command=lambda: self.save_settings(),
+                                     **BUTTON_STYLE)
         self.save_button.pack(fill=tk.BOTH)
-        self.quit_button = tk.Button(master=self.button_frame, text="Quit", command=lambda: self.destroy(), **BUTTON_STYLE)
+        self.quit_button = tk.Button(master=self.button_frame,
+                                     text="Quit",
+                                     command=lambda: self.destroy(),
+                                     **BUTTON_STYLE)
         self.quit_button.pack(fill=tk.BOTH)
 
     def initialize_label_widgets(self) -> None:
@@ -45,24 +58,33 @@ class SettingsMenu(tk.Tk):
             tk.Label(master=self.entry_frame,
                      text=label_text,
                      anchor="e",
-                     justify="right").grid(column=0, row=row)
+                     justify="right",
+                     width=LABEL_WIDTH).grid(column=0, row=row)
 
     def initialize_entry_widgets(self) -> None:
         work_time_settings = read_from_json("work_times.json")
 
-        self.normal_worktime_hours = tk.Entry(master=self.entry_frame)
+        self.normal_worktime_hours = tk.Entry(master=self.entry_frame,
+                                              width=ENTRY_WIDTH,
+                                              justify="center")
         self.normal_worktime_hours.insert(0, str(work_time_settings["NORMAL_DAILY_WORK_TIME_HOURS"]))
         self.normal_worktime_hours.grid(column=1, row=0)
 
-        self.normal_worktime_minutes = tk.Entry(master=self.entry_frame)
+        self.normal_worktime_minutes = tk.Entry(master=self.entry_frame,
+                                                width=ENTRY_WIDTH,
+                                                justify="center")
         self.normal_worktime_minutes.insert(0, str(work_time_settings["NORMAL_DAILY_WORK_TIME_MINUTES"]))
         self.normal_worktime_minutes.grid(column=1, row=1)
 
-        self.max_worktime_hours = tk.Entry(master=self.entry_frame)
+        self.max_worktime_hours = tk.Entry(master=self.entry_frame,
+                                           width=ENTRY_WIDTH,
+                                           justify="center")
         self.max_worktime_hours.insert(0, str(work_time_settings["MAX_DAILY_WORK_TIME_HOURS"]))
         self.max_worktime_hours.grid(column=1, row=2)
 
-        self.max_worktime_minutes = tk.Entry(master=self.entry_frame)
+        self.max_worktime_minutes = tk.Entry(master=self.entry_frame,
+                                             width=ENTRY_WIDTH,
+                                             justify="center")
         self.max_worktime_minutes.insert(0, str(work_time_settings["MAX_DAILY_WORK_TIME_MINUTES"]))
         self.max_worktime_minutes.grid(column=1, row=3)
 
