@@ -23,7 +23,10 @@ LABEL_STYLE_FROZEN: dict[str, any] = {"background": TITLE_BACKGROUND_COLOR_FROZE
 LABEL_STYLE_ACTIVE: dict[str, any] = {"background": TITLE_BACKGROUND_COLOR_ACTIVE,
                                       "foreground": TITLE_FONT_COLOR,
                                       "font": ('calibri', 30, 'bold')}
-
+LABEL_WIDTH: int = 15
+ENTRY_WIDTH: int = 5
+PADY: int = 10
+PADX: int = 10
 # Window Size settings
 FRAME_SIZE: str = "500x500"
 MIN_SIZE: tuple[int, int] = (500, 500)
