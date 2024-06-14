@@ -122,6 +122,7 @@ class GraphicalUserInterface(Tk):
         self.worked_time_label.pack(fill=BOTH,
                                     expand=1)
 
+
     def destroy(self) -> None:
 
         """
@@ -139,7 +140,7 @@ class GraphicalUserInterface(Tk):
     def reset_work_timer(self) -> None:
 
         """
-        Stops counting of the work time counter and sets it back to its inital state.
+        Stops counting of the work time counter and sets it back to its initial state.
         """
 
         self.stop_working()
@@ -205,7 +206,7 @@ class GraphicalUserInterface(Tk):
         else: # normal case, no overtime or max time
             self.__change_worktimer_background_color(new_color="green")
 
-    def start_working(self) -> None:
+    def start_working(self, *args, **kwargs) -> None:
 
         """
         Wrapper-method to call several sub-methods. Updates the visualization of the work timer and presents
@@ -243,7 +244,9 @@ class GraphicalUserInterface(Tk):
                                  bg="#e87807",
                                  command=lambda: self.reset_work_timer())
 
-    def stop_working(self):
+
+
+    def stop_working(self, *args, **kwargs):
 
         """
         Wrapper method which stops work timer from counting
@@ -251,6 +254,8 @@ class GraphicalUserInterface(Tk):
         self.stopped = True
         self.__recolor_stopped_gui()
         self.__manage_start_button()
+
+
 
     def __recolor_stopped_gui(self):
 
@@ -269,3 +274,8 @@ class GraphicalUserInterface(Tk):
                                     expand=1)
         self.__change_worktimer_background_color(new_color="grey")
 
+    def __bind_space_key(self, *args, **kwargs) -> None:
+        if self.stopped:
+            self.bind("<space>", self.start_working)
+        else:
+            self.bind("<space>", self.stop_working)
