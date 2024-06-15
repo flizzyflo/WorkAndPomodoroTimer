@@ -1,7 +1,7 @@
 from enum import Enum
 
 # General information
-PROGRAM_VERSION: str = "1.9"
+PROGRAM_VERSION: str = "2.0"
 PROGRAM_TITLE: str = "Work-time tracking"
 WIDTH: int = 30
 
