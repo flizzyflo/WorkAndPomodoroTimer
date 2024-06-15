@@ -13,7 +13,8 @@ class MenuInformation:
     @staticmethod
     def show_version_information(current_version_number: str) -> None:
         messagebox.showinfo("Changelog & Version information", 
-        f"""-Current Version: {current_version_number}: Extracted work-time-settings to JSON File. Allows management by user easily
+        f"""-Current Version: {current_version_number}: Finalized settings menu, implemented settings menu.
+        \n-Version 1.9: Extracted work-time-settings to JSON File. Allows management by user easily
         Implemented settings Menu for persistent setting management
         \n-Version 1.8: Massive code refactoring, implemented hour-/minute 
         boundaries, improved counting logic, added possibility to continue existing worktime data.
