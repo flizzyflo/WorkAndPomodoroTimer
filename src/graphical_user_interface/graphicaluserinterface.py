@@ -122,7 +122,6 @@ class GraphicalUserInterface(Tk):
         self.worked_time_label.pack(fill=BOTH,
                                     expand=1)
 
-
     def destroy(self) -> None:
 
         """
