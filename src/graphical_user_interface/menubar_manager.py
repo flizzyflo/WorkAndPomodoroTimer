@@ -28,8 +28,6 @@ class MenuBarManager(tk.Menu):
         self.information_menu.add_command(label="Version information", command= lambda: MenuInformation.show_version_information(PROGRAM_VERSION))
         self.db_facade = None
 
-
-
     def export_database_information(self) -> None:
         self.db_facade = DatabaseFacade()
         path_to_store_file: str = filedialog.askdirectory(title="Save export to...")
