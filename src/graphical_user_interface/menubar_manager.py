@@ -5,6 +5,7 @@ from src.graphical_user_interface.settingsmenu import SettingsMenu
 from src.menu_information_management.menuinformation import MenuInformation
 from src.settings.settings import PROGRAM_VERSION
 
+
 class MenuBarManager(tk.Menu):
     """
     Base Menuclass to handle Menu and allow the user to
