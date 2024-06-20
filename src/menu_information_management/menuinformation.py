@@ -6,7 +6,7 @@ class MenuInformation:
     @staticmethod
     def show_menubar_information() -> None:
         messagebox.showinfo("About this application...", 
-                            f"""This application was programmed in Python 3.11.4 by Florian Lübke.
+                            f"""This application was programmed in Python 3.12 by Florian Lübke.
                             \nThis project is explicitly seen as freeware and can be provided to anyone who is 
                             interested in it.\nEnjoy tracking your work-time!""")
 
