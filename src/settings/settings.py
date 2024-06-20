@@ -27,10 +27,10 @@ LABEL_WIDTH: int = 15
 ENTRY_WIDTH: int = 5
 PADY: int = 10
 PADX: int = 10
-SETTINGS_LABEL_NAMES: List[str] = ["Usual daily hours: ",
-                                    "Usual daily minutes: ",
-                                    "Max daily hours: ",
-                                    "Max daily minutes: "]
+SETTING_TIME_LABEL_NAMES: List[str] = ["Usual daily hours: ",
+                                       "Usual daily minutes: ",
+                                       "Max daily hours: ",
+                                       "Max daily minutes: "]
 # Window Size settings
 FRAME_SIZE: str = "500x500"
 MIN_SIZE: Tuple[int, int] = (500, 500)

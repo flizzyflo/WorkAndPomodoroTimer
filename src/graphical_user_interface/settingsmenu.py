@@ -2,7 +2,7 @@ import tkinter as tk
 from typing import Dict, List
 
 from ..settings.json_reader_writer import read_from_json, write_to_json
-from ..settings.settings import BUTTON_STYLE, ENTRY_WIDTH, LABEL_WIDTH, PADY, PADX, SETTINGS_LABEL_NAMES
+from ..settings.settings import BUTTON_STYLE, ENTRY_WIDTH, LABEL_WIDTH, PADY, PADX, SETTING_TIME_LABEL_NAMES
 
 
 class SettingsMenu(tk.Tk):
@@ -30,7 +30,7 @@ class SettingsMenu(tk.Tk):
         self.entry_frame.grid(column=1, row=0, padx=PADX, pady=PADY)
         self.button_frame = tk.Frame(master=self)
         self.button_frame.grid(column=0, row=1, columnspan=2, padx=PADX, pady=PADY)
-        self.label_names = SETTINGS_LABEL_NAMES
+        self.label_names = SETTING_TIME_LABEL_NAMES
         self.save_button = None
         self.quit_button = None
         self.normal_worktime_hours = None
